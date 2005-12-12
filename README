@@ -1,0 +1,16 @@
+
+Geo::Point
+===========
+
+Geo::Point tries to abstract coordinate systems.  It does not try
+to solve all the problems itself, but will call-out for helper
+modules when computation has to be done.
+
+The module is havily resting on Math::Polygon.
+
+***** This module is only in an BETA development state... it is
+***** currently only used with wgs84, so all transformations have
+***** not been tested!!!
+
+Improvements and additions please to
+       Mark Overmeer, <geopoint@overmeer.net>

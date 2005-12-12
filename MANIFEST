@@ -1,0 +1,17 @@
+ChangeLog
+MANIFEST
+Makefile.PL
+README
+lib/Geo/Line.pm
+lib/Geo/Point.pm
+lib/Geo/Proj.pm
+lib/Geo/Shape.pm
+lib/Geo/Space.pm
+lib/Geo/Surface.pm
+t/09proj.t
+t/10dms.t
+t/11point.t
+t/20pstr.t
+t/21lstr.t
+t/22rstr.t
+version

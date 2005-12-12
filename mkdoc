@@ -1,0 +1,133 @@
+#!/usr/bin/perl
+# Create the documentation for the Geo::Point distribution.
+# This script can be called as part of the mkdist procedure, but also
+# on its own.
+
+use warnings;
+use strict;
+
+# use next releases
+use lib 'lib';
+use lib '../OODoc/lib';
+use lib '../MathPolygon/lib';
+use lib '../GeoProj4/lib';
+
+use OODoc;
+
+my $verbose      = $ARGV[0] || 0;
+
+##### Synchronize these constants with the mkdist script.
+my $workdir      = '/tmp/GeoPoint';
+
+##### Other constants
+my $distribution = 'Geo::Point';
+my $name         = 'Spatial geometries';
+
+my $pod_format   = 'pod2';         # install Bundle::Text::MagicTemplate first
+my $website      = 'http://perl.overmeer.net/geopoint';
+my $html_format  = 'html';
+
+my $web          = 'public_html';
+my $html_root    = "/geopoint/html";
+my $css          = "$html_root/geopoint.css";
+
+#
+# The OODoc object is created.  It is used to collect all the manual
+# information in.
+#
+
+my $doc  = OODoc->new
+ ( distribution  => $name
+ , verbose       => $verbose
+ );
+
+my $version      = $doc->version;
+print "*** Producing $distribution version $version\n" if $verbose;
+
+#
+# Reading all the manual pages
+# This could be called more than once to combine different sets of
+# manual pages in different formats.
+#
+
+print "* Processing Geo::Point files\n" if $verbose;
+$doc->processFiles(workdir => $workdir);
+
+#
+# Prepare the collected information
+# Expanding the inheritance relations and such, to simplify the
+# production of manual pages in their different formats.
+#
+
+print "* Preparation phase\n" if $verbose;
+$doc->prepare;
+
+#
+# Create POD
+# Produce manual pages in the usual Perl style.
+#
+
+print "* Creating POD\n" if $verbose;
+
+$doc->create
+  ( $pod_format
+  , workdir => $workdir
+  , append => <<TEXT);
+
+=head1 REFERENCES
+
+See the $distribution website at L<$website> for more details.
+
+=head1 COPYRIGHTS
+
+Module version $version.
+Written by Mark Overmeer (geopoint\@overmeer.net).  See the ChangeLog for
+other contributors.
+
+Copyright (c) 2004-2005 by the author(s). All rights reserved.  This program
+is free software; you can redistribute it and/or modify it under the
+same terms as Perl itself.
+
+TEXT
+
+print "* Processing Geo::Proj4 files\n" if $verbose;
+$doc->processFiles
+ ( workdir => undef
+ , source  => '../GeoProj4'
+ , select  => qr[^ lib/ .*? \.(pod|pm) $ ]x
+ , distribution => 'Geo::Proj4'
+ );
+
+print "* Processing Math::Polygon files\n" if $verbose;
+
+-d '../MathPolygon'
+    or mkdir '../MathPolygon';
+
+$doc->processFiles
+ ( workdir => undef
+ , source  => '../MathPolygon'
+ , select  => qr[^ lib/ .*? \.(pod|pm) $ ]x
+ , distribution => 'Math::Polygon'
+ );
+
+#
+# Create HTML
+#
+
+print "* Creating HTML\n" if $verbose;
+
+$doc->create
+  ( $html_format
+  , workdir        => "$web$html_root"
+
+  , format_options =>
+      [ html_root      => $html_root
+      , html_meta_data => qq[<link rel="STYLESHEET" href="$css">]
+      ]
+
+  , manual_format =>
+      [
+      ]
+  );
+
+print "* Ready\n" if $verbose;
