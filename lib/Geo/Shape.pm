@@ -44,9 +44,10 @@ A point is always true: defined.
 
 =cut
 
-use overload '""'   => 'string'
-           , '=='   => 'equal'
-           , bool   => sub {1};
+use overload '""'     => 'string'
+           , '=='     => 'equal'
+           , bool     => sub {1}
+           , fallback => 1;
 
 =chapter METHODS
 

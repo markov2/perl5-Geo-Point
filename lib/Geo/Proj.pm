@@ -205,13 +205,19 @@ sub projection($)
 }
 
 =c_method defaultProjection [NICK|PROJ]
-The NICK must be defined with M<new()>.  Returned is a M<Geo::Proj>
-object. The initial default is 'wgs84'.
+The NICK must be defined with M<new()>.  Returned is the nickname for
+a projection.  The default is the first name created, which probably
+is 'wgs84' (when import() had a chance)
+
 =cut
 
 sub defaultProjection(;$)
 {   my $thing = shift;
-    @_ ? ($defproj = $thing->projection(shift)) : $defproj;
+    if(@_)
+    {   my $proj = shift;
+        $defproj = ref $proj ? $proj->nick : $proj;
+    }
+    $defproj;
 }
 
 =c_method listProjections

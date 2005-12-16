@@ -5,8 +5,7 @@ use warnings;
 package Geo::Point;
 use base 'Geo::Shape';
 
-use Geo::Proj   ();
-
+use Geo::Proj;
 use Carp        qw/confess croak/;
 
 =chapter NAME
@@ -347,10 +346,15 @@ sub y()         {shift->{G2P_y}}
 sub in($)
 {   my ($self, $newproj) = @_;
 
+croak if ref $self->{G2_proj};
+
+warn "&1";
     # Dirty hacks violate OO, to improve the speed.
     return $self if $newproj eq $self->{G2_proj};
+warn "&2";
 
     my ($n, $p) = $self->projectOn($newproj, [$self->{G2P_x}, $self->{G2P_y}]);
+warn "&3";
     $p ? ref($self)->new(x => $p->[0], y => $p->[1], proj => $n) : $self;
 }
 

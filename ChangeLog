@@ -1,5 +1,10 @@
 Revision history for Perl extension Geo::Point
 
-version 0.001:
+version 0.002:
+
+	- fix of Geo::Proj::default projection(): should always return a
+	  nickname, not an object.
+
+version 0.001: Mon Dec 12 12:04:21 CET 2005
 
 	Initial release
