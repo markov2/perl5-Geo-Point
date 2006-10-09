@@ -1,9 +1,21 @@
 Revision history for Perl extension Geo::Point
 
-version 0.002:
+version 0.03: Mon Oct  9 20:04:16 CEST 2006
+
+	- Do not keep Geo::Proj4 object within Geo::Shape, so Geo
+	  objects can be used in a database.
+
+	- Newest OODoc produces better man-pages.
+
+version 0.002: Mon Sep 25 16:01:18 CEST 2006
 
 	- fix of Geo::Proj::default projection(): should always return a
 	  nickname, not an object.
+
+	- overloading with enabled fallback, which fixes some test
+	  problems.  by [Chia-liang Kao].
+
+	- overload cmp in Geo::Proj
 
 version 0.001: Mon Dec 12 12:04:21 CET 2005
 

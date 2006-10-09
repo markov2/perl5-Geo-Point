@@ -65,7 +65,7 @@ sub new(@) { (bless {}, shift)->init( {@_} ) }
 
 sub init($)
 {   my ($self, $args) = @_;
-    $self->{G2_proj} = $args->{proj} || Geo::Proj->defaultProjection;
+    $self->{G_proj} = $args->{proj} || Geo::Proj->defaultProjection;
     $self;
 }
 
@@ -75,7 +75,7 @@ sub init($)
 Returns the nick of the projection used by the component.
 =cut
 
-sub proj()  {shift->{G2_proj} }
+sub proj()  {shift->{G_proj} }
 
 =section Projections
 
@@ -114,10 +114,10 @@ some cases (for instance UTM) it may be different.
 
 sub projectOn($@)
 {   # fast check: nothing to be done
-    return () if @_<2 || $_[0]->{G2_proj} eq $_[1];
+    return () if @_<2 || $_[0]->{G_proj} eq $_[1];
 
     my ($self, $projnew) = (shift, shift);
-    my $projold = $self->{G2_proj};
+    my $projold = $self->{G_proj};
 
     return wantarray ? @_ : $_[0]
         if $projold eq $projnew;
@@ -261,7 +261,7 @@ sub perimeter()
 =ci_method deg2dms DEGREES, POS, NEG
 =example
  print $point->deg2dms(0.12, 'e', 'w');
- print Geo::->deg2dms(0.12, 'e', 'w');
+ print Geo::Shape->deg2dms(0.12, 'e', 'w');
 =cut
 
 sub deg2dms($$$)
@@ -294,7 +294,7 @@ sub deg2dms($$$)
 Like M<deg2dms()> but without showing seconds.
 =example
  print $point->deg2dm(0.12, 'e', 'w');
- print Geo::->deg2dm(0.12, 'e', 'w');
+ print Geo::Shape->deg2dm(0.12, 'e', 'w');
 =cut
 
 sub deg2dm($$$)

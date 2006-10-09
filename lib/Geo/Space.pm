@@ -31,7 +31,7 @@ Space can contain anything you like: lines, points, and unrelated polygons.
 
 =ci_method new [COMPONENTS], [OPTIONS]
 When called as instance method, some defaults are copied from the
-object where the call is made upon.
+object where the call is made upon.  Usually called as class method.
 
 COMPONENTS are M<Math::Polygon>, M<Math::Polygon::Surface>,
 M<Geo::Point>, M<Geo::Line>, M<Geo::Surface>, M<Geo::Space> objects.
