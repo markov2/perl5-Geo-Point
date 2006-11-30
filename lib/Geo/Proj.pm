@@ -200,8 +200,6 @@ used where in other methods NICKS or PROJ can be used as arguments.
 
 sub projection($)
 {   my $which = $_[1];
-use Carp;
-$which or confess;
     ref $which && $which->isa(__PACKAGE__) ? $which : $projections{$which};
 }
 

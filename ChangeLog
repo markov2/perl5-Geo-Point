@@ -1,5 +1,11 @@
 Revision history for Perl extension Geo::Point
 
+version 0.04: Thu Nov 30 15:08:19 CET 2006
+
+	- Removed some (harmless) debugging traps
+
+	- Geo::Point::normalize()
+
 version 0.03: Mon Oct  9 20:04:16 CEST 2006
 
 	- Do not keep Geo::Proj4 object within Geo::Shape, so Geo
