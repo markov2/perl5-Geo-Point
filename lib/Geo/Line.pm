@@ -339,7 +339,7 @@ sub bbox() { shift->Math::Polygon::bbox }
 Returns the area enclosed by the polygon.  Only useful when the points
 are in some orthogonal projection.
 
-=error Area requires a ring of points.
+=error area requires a ring of points
 If you think you have a ring of points (a polygon), than do specify
 that when that object is instantiated (M<ring()> or M<new(ring)>).
 =cut
@@ -347,7 +347,7 @@ that when that object is instantiated (M<ring()> or M<new(ring)>).
 sub area()
 {   my $self = shift;
 
-    croak "ERROR: Area requires a ring of points."
+    croak "ERROR: area requires a ring of points"
        unless $self->isRing;
 
     $self->Math::Polygon::area;
@@ -356,12 +356,14 @@ sub area()
 =method perimeter
 The length of the line on the ring.  A check is performed that the ring
 is closed, but further this returns the result of M<length()>
+
+=error perimeter requires a ring of points
 =cut
 
 sub perimeter()
 {   my $self = shift;
 
-    croak "ERROR: Perimeter requires a ring of points."
+    croak "ERROR: perimeter requires a ring of points."
        unless $self->isRing;
 
     $self->Math::Polygon::perimeter;

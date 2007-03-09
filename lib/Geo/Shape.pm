@@ -142,7 +142,7 @@ The default UNIT is kilometers.  Other units are provided in the manual
 page of L<Geo::Distance>.  As extra unit, C<degrees> and C<radians> are
 added as well as the C<km> alias for kilometer.
 
-=error Distance calculation not implemented between a $kind and a $kind
+=error distance calculation not implemented between a $kind and a $kind
 Only a subset of all objects can be used in the distance calculation.
 The limitation is purely caused by lack of time to implement this.
 =cut
@@ -168,7 +168,7 @@ sub distance($;$)
     {   return $self->distancePointPoint($geodist, $unit, $other);
     }
 
-    die "ERROR: Distance calculation not implemented between a "
+    die "ERROR: distance calculation not implemented between a "
       . ref($self) . " and a " . ref($other);
 }
 

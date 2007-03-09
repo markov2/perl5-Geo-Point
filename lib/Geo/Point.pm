@@ -203,19 +203,19 @@ Those coordinates must follow the rules of M<dms2deg()>.
 
 =error UTM requires 3 values: easting, northing, and zone
 
-=error Illegal UTM zone in $string
+=error illegal UTM zone in $string
 A UTM zone can be detected at the beginning or at the end of the
 input.  It contains a number (from 1 upto 60) and an optional
 latitude indication (C upto X, except I and O).
 
-=error Undefined projection $proj for $string
+=error undefined projection $proj for $string
 The projection you used (or is set as default) is not defined.  See
 M<Geo::Proj::new()> about how to defined them.
 
-=error Too few values in $string (got @parts)
+=error too few values in $string (got @parts)
 Most projection require two parameters, but utm requires three (with zone).
 
-=error Too many values in $string (got @parts)
+=error too many values in $string (got @parts)
 Most projection require two parameters, but utm requires three (with zone).
 
 =error dms latitude coordinate not understood: $string
@@ -270,7 +270,7 @@ sub fromString($;$)
         }
 
         if(!defined $zone || $zone==0 || $zone > 60)
-        {   die "ERROR: Illegal UTM zone in $string";
+        {   die "ERROR: illegal UTM zone in $string";
         }
 
         $proj = Geo::Proj->UTMprojection(undef, $zone);
@@ -278,13 +278,13 @@ sub fromString($;$)
     }
     else
     {   $proj = Geo::Proj->projection($nick)
-            or croak "ERROR: Undefined projection $nick";
+            or croak "ERROR: undefined projection $nick";
     }
 
-    croak "ERROR: Too few values in '$string' (got ".@parts.", expect 2)\n"
+    croak "ERROR: too few values in '$string' (got ".@parts.", expect 2)\n"
        if @parts < 2;
 
-    croak "ERROR: Too many values in '$string' (got ".@parts.", expect 2)\n"
+    croak "ERROR: too many values in '$string' (got ".@parts.", expect 2)\n"
        if @parts > 2;
 
     if($proj->proj4->isLatlong)
@@ -407,13 +407,13 @@ sub distancePointPoint($$$)
 }
 
 =method sameAs OTHER, TOLERANCE
-=error Can only compare a point to an other Geo::Point
+=error can only compare a point to an other Geo::Point
 =cut
 
 sub sameAs($$)
 {   my ($self, $other, $e) = (shift, shift);
 
-    croak "ERROR: Can only compare a point to an other Geo::Point"
+    croak "ERROR: can only compare a point to an other Geo::Point"
         unless $other->isa('Geo::Point');
 
     # may be latlong or xy, doesn't matter: $e is corrected for that

@@ -43,12 +43,13 @@ COMPONENT, it will be used to instantiate a M<Math::Polygon::Surface>
 object.  In case of a M<Geo::Surface>, the included polygons are
 translated to the specified projection.
 
-=examples
-
 =warning Geo::Line is should be filled
 When M<Geo::Line> objects are used to compose a surface, each of them
 must be filled.  Representation of rivers and such do not belong in a
 surface description.
+
+=error not known what to do with $component
+
 =cut
 
 sub new(@)
