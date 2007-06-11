@@ -1,5 +1,9 @@
 Revision history for Perl extension Geo::Point
 
+version 0.06: Mon Jun 11 16:55:01 CEST 2007
+
+	- added t/pod.t
+
 version 0.05: Fri Mar  9 14:18:25 CET 2007
 
 	- Converted to use oodist, removing mkdist, mkdoc, version.

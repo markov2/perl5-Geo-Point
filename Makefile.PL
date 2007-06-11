@@ -4,7 +4,7 @@ require 5.008;
 
 WriteMakefile
   ( NAME        => 'Geo::Point'
-  , VERSION     => '0.05'
+  , VERSION     => '0.06'
   , PREREQ_PM   =>
      { Test::More    => 0.47
      , Geo::Distance => 0.06
@@ -33,6 +33,7 @@ WEBSITE         = http://perl.overmeer.net/geo/
 EXTENDS		= ../MathPolygon:../GeoProj4
 HTML_OUTPUT     = ../public_html/geo/html
 HTML_DOCROOT    = /geo/html
+HTML_PACKAGE    = ../public_html/geo/htmlpkg
 
 __POSTAMBLE
 
