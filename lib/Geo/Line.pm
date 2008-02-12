@@ -9,15 +9,12 @@ use Carp;
 use List::Util    qw/min max/;
 use Scalar::Util  qw/refaddr/;
 
-use Math::Polygon ();
-
 =chapter NAME
 
 Geo::Line - a sequence of connected points
 
 =chapter SYNOPSIS
 
- !!!! BETA code, see README !!!!
  my $line  = Geo::Line->new(points => [$p1, $p2]);
  my $line  = Geo::Line->line($p1, $p2);
 
@@ -115,6 +112,8 @@ sub ring(@)
 {   my $thing = shift;
     my @points;
     push @points, shift while @_ && ref $_[0];
+    croak "ERROR: a ring or filled needs at least two points\n"
+        if @points <= 2;
 
     # close ring
     my ($first, $last) = @points[0, -1];
@@ -303,7 +302,7 @@ Returns a true value is the internals of the ring of points are declared
 to belong to the shape.
 =cut
 
-sub isFilled() {shift->{GL_fill}}
+sub isFilled() { shift->{GL_fill} }
 
 =section Projections
 =cut
@@ -404,7 +403,7 @@ stringification.
 =examples
 =cut
 
-sub string(;$)
+sub toString(;$)
 {   my ($self, $proj) = @_;
     my $line;
     if(defined $proj)
@@ -421,5 +420,6 @@ sub string(;$)
 
     "$type\[$proj](".$line->Math::Polygon::string.')';
 }
+*string = \&toString;
 
 1;

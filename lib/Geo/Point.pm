@@ -463,17 +463,17 @@ sub coords()
    sprintf "%.4f %.4f", $a, $b;
 }
 
-=method string [PROJECTION]
+=method toString [PROJECTION]
 Returns a string representation of the point, which is also used for
 stringification.  The default projection is the one of the point.
 =examples
- print "Point: ",$gp->string, "\n";
+ print "Point: ",$gp->toString, "\n";
  print "Point: $gp\n";   # same
 
- print "Point: ",$gp->string('clrk66'), "\n";
+ print "Point: ",$gp->toString('clrk66'), "\n";
 =cut
 
-sub string(;$)
+sub toString(;$)
 {   my ($self, $proj) = @_;
     my $point;
 
@@ -487,6 +487,7 @@ sub string(;$)
 
     "point[$proj](" .$point->coords.')';
 }
+*string = \&toString;
 
 =method dms [PROJECTION]
 Show the point as DMS value-pair.  You must be sure that the coordinate

@@ -1,5 +1,21 @@
 Revision history for Perl extension Geo::Point
 
+version 0.07: Tue Feb 12 10:00:05 CET 2008
+
+	- use Geo::Distance for Geo::Shape::distance [Mark Lawrence]
+
+	- use Math::Trig for Geo::Shape::distance [Mark Lawrence]
+
+	- added dependency for Math::Trig
+
+	- add '0' before 1 digit minutes and seconds in deg2dm() and
+	  deg2dms()
+
+	- GeoPoint is stable for quite some time, but the man-page
+	  still contained ALPHA and BETA release warnings.
+
+	- added toString() as prefered over string().
+
 version 0.06: Mon Jun 11 16:55:01 CEST 2007
 
 	- added t/pod.t

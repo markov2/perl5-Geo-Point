@@ -14,7 +14,6 @@ Geo::Space - A collection of various  items
 
 =chapter SYNOPSIS
 
- !!!! very ALPHA code, see README !!!!
  my $island1 = Geo::Line->filled(...);
  my $island2 = Geo::Space->new(...);
  my $islands = Geo::Space->new($island1, $island2)
@@ -185,14 +184,14 @@ sub perimeter() { sum map { $_->perimeter } shift->components }
 
 =section Display
 
-=method string [PROJECTION]
+=method toString [PROJECTION]
 Returns a string representation of the line, which is also used for
 stringification.
 
 =examples
 =cut
 
-sub string(;$)
+sub toString(;$)
 {   my ($self, $proj) = @_;
     my $space;
     if(defined $proj)
@@ -207,5 +206,6 @@ sub string(;$)
     . join(")\n  (", map {$_->string} $space->components)
     . ")\n";
 }
+*string = \&toString;
 
 1;

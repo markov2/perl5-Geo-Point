@@ -4,15 +4,17 @@ require 5.008;
 
 WriteMakefile
   ( NAME        => 'Geo::Point'
-  , VERSION     => '0.06'
+  , VERSION     => '0.07'
   , PREREQ_PM   =>
      { Test::More    => 0.47
      , Geo::Distance => 0.06
      , Geo::Proj4    => 0.96
      , Math::Polygon => 0.003
+     , Math::Trig    => 1.00
      }
   , AUTHOR      => 'Mark Overmeer'
-  , ABSTRACT      => 'Geographical structures'
+  , ABSTRACT    => 'Geographical structures'
+  , LICENSE     => 'perl'
   );
 
 #### the next lines are added for OODoc, which generates the
@@ -30,7 +32,7 @@ EMAIL           = geo@overmeer.net
 WEBSITE         = http://perl.overmeer.net/geo/
 
 # for HTML
-EXTENDS		= ../MathPolygon:../GeoProj4
+EXTENDS		= ../MathPolygon:../GeoProj4:../GeoWKT
 HTML_OUTPUT     = ../public_html/geo/html
 HTML_DOCROOT    = /geo/html
 HTML_PACKAGE    = ../public_html/geo/htmlpkg

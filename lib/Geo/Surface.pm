@@ -17,7 +17,6 @@ Geo::Surface - A surface description.
 
 =chapter SYNOPSIS
 
- !!!! ALPHA code, see README !!!!
  my $island1 = Geo::Line->filled(...);
  my $island2 = Geo::Surface->new(...);
  my $islands = Geo::Surface->new($island1, $island2)
@@ -58,8 +57,13 @@ sub new(@)
     push @components, shift while ref $_[0];
     my %args  = @_;
 
+    my $class;
     if(ref $thing)    # instance method
     {   $args{proj} ||= $thing->proj;
+        $class = ref $thing;
+    }
+    else
+    {   $class = $thing;
     }
 
     my $proj = $args{proj};
@@ -68,18 +72,23 @@ sub new(@)
 
     my @surfaces;
     foreach my $component (@components)
-    {   if(ref $component eq 'ARRAY')
-        {   push @surfaces, Math::Polygon::Surface->new(@$component);
+    {
+        if(ref $component eq 'ARRAY')
+        {   $component = $class->new(@$component);
         }
-        elsif($component->isa('Math::Polygon'))
-        {   push @surfaces, Math::Polygon::Surface->new($component);
+        elsif(ref $component eq 'Math::Polygon')
+        {   $component = Geo::Line->filled($component->points);
         }
-        elsif($component->isa('Math::Polygon::Surface'))
+        elsif(ref $component eq 'Math::Polygon::Surface')
+        {   bless $component, $class;
+        }
+
+        if($component->isa('Geo::Point'))
         {   push @surfaces, $component;
-        }
+        }   
         elsif($component->isa('Geo::Line'))
         {   carp "Warning: Geo::Line is should be filled."
-                 unless $component->filled;
+                unless $component->isFilled;
             push @surfaces, defined $proj ? $component->in($proj) : $component;
         }
         elsif($component->isa('Geo::Surface'))
@@ -201,14 +210,13 @@ sub perimeter() { sum map { $_->perimeter } shift->components }
 
 =section Display
 
-=method string [PROJECTION]
+=method toString [PROJECTION]
 Returns a string representation of the line, which is also used for
 stringification.
 
-=examples
 =cut
 
-sub string(;$)
+sub toString(;$)
 {   my ($self, $proj) = @_;
     my $surface;
     if(defined $proj)
@@ -220,8 +228,9 @@ sub string(;$)
     }
 
       "surface[$proj]\n  ("
-    . join(")\n  (", map {$_->string} $surface->components)
+    . join(")\n  (", map {$_->toString} $surface->components)
     . ")\n";
 }
+*string = \&toString;
 
 1;

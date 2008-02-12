@@ -10,6 +10,9 @@ use Geo::Line       ();
 use Geo::Surface    ();
 use Geo::Space      ();
 
+use Geo::Distance   ();
+use Math::Trig      qw/deg2rad/;
+
 use Carp            qw/croak confess/;
 
 =chapter NAME
@@ -18,7 +21,6 @@ Geo::Shape - base class for 2-dimensional points on the earth surface
 
 =chapter SYNOPSIS
 
- !!!! BETA code, see README !!!!
  use Geo::Shape;
 
  my $p1 = Geo::Point->new(lat => 2.17, ...);
@@ -284,9 +286,9 @@ sub deg2dms($$$)
 
     my $g       = int($s + 0.00001);
     my $h       = int(($s - $g) * 1000 + 0.0001);
-      $h ? sprintf("%dd%d'%d.%03d\"$sign", $d, $m, $g, $h)
-    : $s ? sprintf("%dd%d'%d\"$sign", $d, $m, $g)
-    : $m ? sprintf("%dd%d'$sign", $d, $m)
+      $h ? sprintf("%dd%02d'%02d.%03d\"$sign", $d, $m, $g, $h)
+    : $s ? sprintf("%dd%02d'%02d\"$sign", $d, $m, $g)
+    : $m ? sprintf("%dd%02d'$sign", $d, $m)
     :      sprintf("%d$sign", $d);
 }
 
@@ -314,7 +316,7 @@ sub deg2dm($$$)
     my $frac    = ($degrees - $d) * 60;
     my $m       = int($frac + 0.00001);
 
-    $m ? sprintf("%dd%d'$sign", $d, $m)
+    $m ? sprintf("%dd%02d'$sign", $d, $m)
        : sprintf("%d$sign", $d);
 }
 

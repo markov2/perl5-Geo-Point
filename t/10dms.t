@@ -22,8 +22,8 @@ is($pkg->deg2dms(0, 'e', 'w'), '0e',                      'zero east');
 is($pkg->deg2dms(1, 'e', 'w'), '1e',                      'one east');
 is($pkg->deg2dms(-1, 'e', 'w'), '1w',                     'one west');
 
-is($pkg->deg2dms(3.14159265, 'E', 'W'), qq#3d8'29.733"E#,  'pi east');
-is($pkg->deg2dms(-3.14159265, 'E', 'W'), qq#3d8'29.733"W#, 'pi west');
+is($pkg->deg2dms( 3.14159265, 'E', 'W'), qq#3d08'29.733"E#, 'pi east');
+is($pkg->deg2dms(-3.14159265, 'E', 'W'), qq#3d08'29.733"W#, 'pi west');
 
 #
 # DMSEG
@@ -53,5 +53,5 @@ ok(about($pkg->dms2deg( qq#3d8E# ), 3.13333333));
 #
 
 my $p = Geo::Point->latlong(3.12, 4.20);
-is($p->dms, qq#3d7'12"N, 4d12'E#,                              'dms');
-is($p->dm,  qq#3d7'N, 4d12'E#,                                 'dm');
+is($p->dms, qq#3d07'12"N, 4d12'E#, 'dms');
+is($p->dm,  qq#3d07'N, 4d12'E#,    'dm' );
