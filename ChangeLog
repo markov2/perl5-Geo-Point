@@ -1,5 +1,10 @@
 Revision history for Perl extension Geo::Point
 
+version 0.08: Mon Mar 31 08:58:30 CEST 2008
+
+	- very stupid bugs when 0 was used as lat or long.  Hit by
+	  [Paul Tomblin]
+
 version 0.07: Tue Feb 12 10:00:05 CET 2008
 
 	- use Geo::Distance for Geo::Shape::distance [Mark Lawrence]

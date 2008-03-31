@@ -69,8 +69,12 @@ sub init($)
 {   my ($self, $args) = @_;
 
     $self->SUPER::init($args);
-    $self->{GP_x} = $args->{x} || $args->{long} || $args->{longitude};
-    $self->{GP_y} = $args->{y} || $args->{lat}  || $args->{latitude};
+    $self->{GP_x} = defined $args->{x}    ? $args->{x}
+                  : defined $args->{long} ? $args->{long}
+                  :                         $args->{longitude};
+    $self->{GP_y} = defined $args->{y}    ? $args->{y}
+                  : defined $args->{lat}  ? $args->{lat}
+                  :                         $args->{latitude};
     $self;
 }
 
