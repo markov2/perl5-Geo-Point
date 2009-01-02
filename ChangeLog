@@ -1,5 +1,18 @@
 Revision history for Perl extension Geo::Point
 
+version 0.09: Fri Jan  2 20:08:35 CET 2009
+
+	Fixes:
+
+	- creation of Geo::Line objects based on Geo::Point objects.
+	  rt.cpan.org#42076 [Jonathan Yu]
+
+	- fix call to bestUTMprojection for 'utm' default nick-name
+
+	- repare UTM zone calculation.
+
+	- repare reprojecting of lines.
+
 version 0.08: Mon Mar 31 08:58:30 CEST 2008
 
 	- very stupid bugs when 0 was used as lat or long.  Hit by

@@ -4,7 +4,7 @@ require 5.008;
 
 WriteMakefile
   ( NAME        => 'Geo::Point'
-  , VERSION     => '0.08'
+  , VERSION     => '0.09'
   , PREREQ_PM   =>
      { Test::More    => 0.47
      , Geo::Distance => 0.06
@@ -32,10 +32,11 @@ EMAIL           = geo@overmeer.net
 WEBSITE         = http://perl.overmeer.net/geo/
 
 # for HTML
-EXTENDS		= ../MathPolygon:../GeoProj4:../GeoWKT
+EXTENDS		= ../MathPolygon:../GeoProj4:../GeoWKT:../GeoGML:../Geo139:../GeoEOP:../XMLCompile:../XMLCache:../Envisat
 HTML_OUTPUT     = ../public_html/geo/html
 HTML_DOCROOT    = /geo/html
 HTML_PACKAGE    = ../public_html/geo/htmlpkg
 
+PODTAIL         = ../Geo-shared-podtail
 __POSTAMBLE
 

@@ -63,7 +63,7 @@ Create a new object.
 
 =cut
 
-sub new(@) { (bless {}, shift)->init( {@_} ) }
+sub new(@) { my $class = shift; (bless {}, $class)->init( {@_} ) }
 
 sub init($)
 {   my ($self, $args) = @_;
@@ -109,7 +109,7 @@ sub in($) { croak "ERROR: in() not implemented for a ".ref(shift) }
 =method projectOn NICK, POINTS
 The POINTS are ARRAYS with each an X and Y coordinate of a single
 point in space.  A list of transformed POINTS is returned, which is empty
-if no change is needed.  The return list is preceeded by a projection
+if no change is needed.  The returned list is preceeded by a projection
 NICK which is the result, usually the same as the provided NICK, but in
 some cases (for instance UTM) it may be different.
 =cut
@@ -121,15 +121,20 @@ sub projectOn($@)
     my ($self, $projnew) = (shift, shift);
     my $projold = $self->{G_proj};
 
-    return wantarray ? @_ : $_[0]
+    return ($projnew, @_)
         if $projold eq $projnew;
 
     if($projnew eq 'utm')
-    {   $projnew = Geo::Proj->bestUTMprojection($projold, $_[0])->nick;
-        return () if $projnew eq $projold;
+    {   my $point = $_[0];
+        $point   = Geo::Point->xy(@$point, $projold)
+            if ref $point eq 'ARRAY';
+        $projnew = Geo::Proj->bestUTMprojection($point, $projold)->nick;
+        return ($projnew, @_)
+            if $projnew eq $projold;
     }
 
-    ($projnew, Geo::Proj->to($projold, $projnew, @_));
+    my $points = Geo::Proj->to($projold, $projnew, \@_);
+    ($projnew, @$points);
 }
 
 =section Geometry

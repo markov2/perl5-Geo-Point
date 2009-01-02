@@ -36,7 +36,7 @@ to use the same projection.
 
 =ci_method new [OPTIONS], [POINTS], [OPTIONS]
 When called as instance method, the projection, ring, and filled attributes
-are taken from the initiator.
+are taken from the initiator, like a clone with modification.
 
 =option  points ARRAY-OF-POINTS|ARRAY-OF-COORDINATES
 =default points <data>
@@ -65,22 +65,35 @@ shape.
 =cut
 
 sub new(@)
-{   return shift->Math::Polygon::new(@_)
-        unless ref $_[0];
+{   my ($thing, %args) = @_;
+    if(my $points = $args{points})
+    {   @$points >= 2
+            or croak "ERROR: line needs at least two points";
+
+        my $proj = $args{proj};
+        foreach my $p (@$points)
+        {   next unless UNIVERSAL::isa($p, 'Geo::Point');
+            $proj ||= $p->proj;
+            $p      = [ $p->xy($proj) ];   # replace
+        }
+    }
+
+    return shift->Math::Polygon::new(%args)
+        unless ref $thing;
 
     # instance method
-    my $parent = shift;
-    $parent->Math::Polygon::new
-      ( ring   => $parent->{GL_ring}
-      , filled => $parent->{GL_fill}
-      , proj   => $parent->proj
-      , @_
+    $thing->Math::Polygon::new
+      ( ring   => $thing->{GL_ring}
+      , filled => $thing->{GL_fill}
+      , proj   => $thing->proj
+      , %args
       );
 }
 
 sub init($)
 {   my ($self, $args) = @_;
     $self->Geo::Shape::init($args);
+
     $self->Math::Polygon::init($args);
 
     $self->{GL_ring} = $args->{ring} || $args->{filled};
@@ -109,19 +122,14 @@ internal.
 =cut
 
 sub ring(@)
-{   my $thing = shift;
-    my @points;
-    push @points, shift while @_ && ref $_[0];
-    croak "ERROR: a ring or filled needs at least two points\n"
-        if @points <= 2;
+{   my $thing  = shift;
+    my $self   = $thing->line(@_, ring => 1);
+    my $points = $self->points;
 
-    # close ring
-    my ($first, $last) = @points[0, -1];
-    my ($x0, $y0) = ref $first eq 'ARRAY' ? @$first : ($first->x, $first->y);
-    my ($x1, $y1) = ref $last  eq 'ARRAY' ? @$last  : ($last->x,  $last->y);
-    push @points, $first unless $x0==$x1 && $y0==$y1;
-
-    $thing->new(points => \@points, @_, ring => 1);
+    my ($first, $last) = @$points[0, -1];
+    push @$points, $first
+        unless $first->[0] == $last->[0] && $first->[1] == $last->[1];
+    $self;
 }
 
 =ci_method filled POINTS, OPTIONS
@@ -311,8 +319,10 @@ sub in($)
 {   my ($self, $projnew) = @_;
     return $self if ! defined $projnew || $projnew eq $self->proj;
 
-    my @points = $self->projectOn($projnew, $self->points);
-    @points ? $self->new(points => \@points, proj => $projnew) : $self;
+    # projnew can be 'utm'
+    my ($realproj, @points) = $self->projectOn($projnew, $self->points);
+
+    @points ? $self->new(points => \@points, proj => $realproj) : $self;
 }
 
 =section Geometry

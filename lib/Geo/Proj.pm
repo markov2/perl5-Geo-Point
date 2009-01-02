@@ -200,7 +200,7 @@ used where in other methods NICKS or PROJ can be used as arguments.
 
 sub projection($)
 {   my $which = $_[1];
-    ref $which && $which->isa(__PACKAGE__) ? $which : $projections{$which};
+    UNIVERSAL::isa($which, __PACKAGE__) ? $which : $projections{$which};
 }
 
 =c_method defaultProjection [NICK|PROJ]
@@ -303,8 +303,8 @@ sub zoneForUTM($)
        )
      : undef;
 
-    my $meridian = int($long/6)*6 + 3;   # degrees
-    $zone ||= int($meridian/6)+1;
+    my $meridian = int($long/6)*6 + ($long < 0 ? -3 : +3);
+    $zone      ||= int($meridian/6) + 180/6 +1;
  
     my $letter
      = ($lat < -80 || $lat > 84) ? ''
@@ -327,9 +327,8 @@ specify the nickname or the object for the point.
 =cut
 
 sub bestUTMprojection($;$)
-{   my $thing = shift;
-    my $point = shift;
-    my $proj  = $thing->proj4(@_ ? shift : $point->proj);
+{   my ($thing, $point) = (shift, shift);
+    my $proj  = @_ ? shift : $point->proj;
 
     my ($zone, $letter, $meridian) = $thing->zoneForUTM($point);
     $thing->UTMprojection($proj, $zone);
@@ -350,16 +349,14 @@ sub UTMprojection($$)
 {   my ($class, $base, $zone) = @_;
 
     $base   ||= $class->defaultProjection;
-    my $datum = lc( ref $base && $base->isa(__PACKAGE__)
-                  ? $base->proj4->datum
-                  : $base
-                  ) || 'wgs84';
+    my $datum = UNIVERSAL::isa($base, __PACKAGE__) ? $base->proj4->datum:$base;
+    $datum  ||= 'wgs84';
 
-    my $label = "utm-${datum}-$zone";
+    my $label = "utm-\L${datum}\E-$zone";
 
     Geo::Proj->new
      ( nick  => $label
-     , proj4 => "+proj=utm +datum=$datum zone=$zone"
+     , proj4 => "+proj=utm +datum=\U$datum\E zone=$zone"
      );
 }
 

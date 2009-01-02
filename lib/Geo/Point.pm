@@ -130,7 +130,7 @@ sub longlat(@)
     $thing->new(long => shift, lat => shift, proj => shift);
 }
 
-=c_method xy [X, Y, [PROJ] ] | [PROJ]
+=ci_method xy [X, Y, [PROJ] ] | [PROJ]
 Like M<latlong()> but now for carthesian projections.  Usually, the coordinate
 order is reversed.  See also M<yx()>.
 =cut
@@ -149,7 +149,7 @@ sub xy(@)
     $thing->new(x => shift, y => shift, proj => shift);
 }
 
-=c_method yx [Y, X, [PROJ] ] | [PROJ]
+=ci_method yx [Y, X, [PROJ] ] | [PROJ]
 Like M<latlong()> but now for carthesian projections.  Usually, the
 coordinate order is reversed.  See also M<xy()>.
 =cut
