@@ -12,7 +12,6 @@ use Geo::Space      ();
 
 use Geo::Distance   ();
 use Math::Trig      qw/deg2rad/;
-
 use Carp            qw/croak confess/;
 
 =chapter NAME
@@ -67,17 +66,35 @@ sub new(@) { my $class = shift; (bless {}, $class)->init( {@_} ) }
 
 sub init($)
 {   my ($self, $args) = @_;
-    $self->{G_proj} = $args->{proj} || Geo::Proj->defaultProjection;
+    my $proj = $self->{G_proj}
+             = $args->{proj} || Geo::Proj->defaultProjection->nick;
+
+    croak "proj parameter must be a label, not a Geo::Proj object"
+        if UNIVERSAL::isa($proj, 'Geo::Proj');
+
     $self;
 }
+
+#---------------------------
 
 =section Attributes
 
 =method proj
-Returns the nick of the projection used by the component.
+Returns the nickname of the projection used by the component.  Be
+warned: this is not a M<Geo::Point> object, but just a label.
 =cut
 
 sub proj()  {shift->{G_proj} }
+
+=method proj4
+Returns the proj4 object which handles the projection.
+=cut
+
+sub proj4()
+{   Geo::Proj->proj4(shift->{G_proj});
+}
+
+#---------------------------
 
 =section Projections
 
@@ -136,6 +153,8 @@ sub projectOn($@)
     my $points = Geo::Proj->to($projold, $projnew, \@_);
     ($projnew, @$points);
 }
+
+#---------------------------
 
 =section Geometry
 

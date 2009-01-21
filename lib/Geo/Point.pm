@@ -24,7 +24,7 @@ Geo::Point - a point on the globe
 
  my ($lat, $long) = $p->latlong;
  my ($x, $y) = $p->xy;
- my ($x, $y) = $p->in('utm-wgs84-31N');
+ my ($x, $y) = $p->in('utm31-wgs84');
 
  my $p = Geo::Point->xy(1,2);
 
@@ -306,7 +306,7 @@ sub fromString($;$)
         defined $long
            or die "ERROR: dms longitude coordinate not understood: $longs\n";
 
-        return $class->new(lat => $lat, long => $long, proj => $proj);
+        return $class->new(lat => $lat, long => $long, proj => $nick);
     }
     else # type eq xy
     {   my ($x, $y) = @parts;
@@ -316,7 +316,7 @@ sub fromString($;$)
         die "ERROR: illegal character in y coordinate $y"
             unless $y =~ m/^\d+(?:\.\d+)$/;
 
-        return $class->new(x => $x, y => $y, proj => $proj);
+        return $class->new(x => $x, y => $y, proj => $nick);
     }
 
     ();

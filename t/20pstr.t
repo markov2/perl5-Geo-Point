@@ -7,7 +7,7 @@
 use strict;
 use warnings;
 
-use lib qw(. .. lib tests ../MathPolygon/lib ../../MathPolygon/lib);
+use lib qw(. .. lib tests);
 
 use Test::More tests => 107;
 
@@ -30,8 +30,8 @@ sub check($$$$)
 my $w = Geo::Proj->projection('wgs84');
 ok($w);
 
-my $u = Geo::Proj->new(nick => 'utm-wgs84-31'
- , proj4 => "+proj=utm +zone=31 +datum=WGS84");
+my $u = Geo::Proj->new(nick => 'utm31-wgs84'
+  , proj4 => "+proj=utm +zone=31 +datum=WGS84");
 ok($u);
 
 ### lat long
@@ -67,9 +67,9 @@ check("5d3e, 2d30'", 'wgs84', 5.05, 2.5);
 
 ## utm
 
-check("utm: 31 12.34 5.678",   'utm-wgs84-31', 12.34, 5.678);
-check("utm: 31,12.34,5.678",   'utm-wgs84-31', 12.34, 5.678);
-check("utm: 31, 12.34, 5.678", 'utm-wgs84-31', 12.34, 5.678);
-check("utm, 31, 12.34, 5.678", 'utm-wgs84-31', 12.34, 5.678);
-check("utm 31 12.34 5.678",    'utm-wgs84-31', 12.34, 5.678);
+check("utm: 31 12.34 5.678",   'utm31-wgs84', 12.34, 5.678);
+check("utm: 31,12.34,5.678",   'utm31-wgs84', 12.34, 5.678);
+check("utm: 31, 12.34, 5.678", 'utm31-wgs84', 12.34, 5.678);
+check("utm, 31, 12.34, 5.678", 'utm31-wgs84', 12.34, 5.678);
+check("utm 31 12.34 5.678",    'utm31-wgs84', 12.34, 5.678);
 

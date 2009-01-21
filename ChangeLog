@@ -1,5 +1,17 @@
 Revision history for Perl extension Geo::Point
 
+version 0.10: Wed Jan 21 10:04:19 CET 2009
+
+	Fixes:
+
+	- projection lost during line creation from geopoints.
+
+	- default projection must be expressed as label, not object.
+
+	- default projection for surface is that of first component.
+
+	- many fixes to Surface initiation.
+
 version 0.09: Fri Jan  2 20:08:35 CET 2009
 
 	Fixes:
@@ -12,6 +24,11 @@ version 0.09: Fri Jan  2 20:08:35 CET 2009
 	- repare UTM zone calculation.
 
 	- repare reprojecting of lines.
+
+	Improvement:
+
+	- croak when object is passed as proj parameter: must be a
+	  Geo::Proj label.
 
 version 0.08: Mon Mar 31 08:58:30 CEST 2008
 

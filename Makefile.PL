@@ -4,7 +4,7 @@ require 5.008;
 
 WriteMakefile
   ( NAME        => 'Geo::Point'
-  , VERSION     => '0.09'
+  , VERSION     => '0.10'
   , PREREQ_PM   =>
      { Test::More    => 0.47
      , Geo::Distance => 0.06
@@ -28,7 +28,7 @@ LICENSE         = artistic
 
 # for POD
 FIRST_YEAR      = 2005
-EMAIL           = geo@overmeer.net
+EMAIL           = perl@overmeer.net
 WEBSITE         = http://perl.overmeer.net/geo/
 
 # for HTML

@@ -204,9 +204,9 @@ sub projection($)
 }
 
 =c_method defaultProjection [NICK|PROJ]
-The NICK must be defined with M<new()>.  Returned is the nickname for
-a projection.  The default is the first name created, which probably
-is 'wgs84' (when import() had a chance)
+The NICK must be defined with M<new()>.  Returned is the Geo::Proj object
+for the default projection.  The default is the first name created,
+which probably is 'wgs84' (when import() had a chance)
 
 =cut
 
@@ -214,7 +214,7 @@ sub defaultProjection(;$)
 {   my $thing = shift;
     if(@_)
     {   my $proj = shift;
-        $defproj = ref $proj ? $proj->nick : $proj;
+        $defproj = ref $proj ? $proj : $thing->projection($proj);
     }
     $defproj;
 }
@@ -252,9 +252,9 @@ is done by M<Geo::Proj4::transform()>.  As class method, you have to
 specify two nicks or projections.
 
 =examples
- my $p2 = $wgs84->to('utm-wgs84-31', $p1);
+ my $p2 = $wgs84->to('utm31-wgs84', $p1);
  my $p2 = $wgs84->to($utm, $p1);
- my $p2 = Geo::Proj->to('wgs84', 'utm-wgs84-31', $p1);
+ my $p2 = Geo::Proj->to('wgs84', 'utm31-wgs84', $p1);
 =cut
 
 sub to($@)
@@ -322,7 +322,7 @@ specify the nickname or the object for the point.
 =example
  my $point = Geo::Point->longlat(2.234, 52.12);
  my $proj  = Geo::Proj->bestUTMprojection($point);
- print $proj->nick;    # for instance utm-wgs84-31
+ print $proj->nick;    # for instance utm31-wgs84
 
 =cut
 
@@ -342,7 +342,7 @@ be replaced by the default projection.
 
 =example
  my $proj = Geo::Proj->UTMprojection('WGS84', 31) or die;
- print $proj->nick;    # for instance utm-wgs84-31
+ print $proj->nick;    # for instance utm31-wgs84
 =cut
 
 sub UTMprojection($$)
@@ -352,7 +352,7 @@ sub UTMprojection($$)
     my $datum = UNIVERSAL::isa($base, __PACKAGE__) ? $base->proj4->datum:$base;
     $datum  ||= 'wgs84';
 
-    my $label = "utm-\L${datum}\E-$zone";
+    my $label = "utm$zone-\L${datum}\E";
 
     Geo::Proj->new
      ( nick  => $label
