@@ -1,5 +1,13 @@
 Revision history for Perl extension Geo::Point
 
+version 0.90: Tue Jan 27 16:45:11 CET 2009
+
+	Fixes:
+
+	- do not use /bin/pwd in t/pod.t
+
+	- detected projection of ::Surface not registered.
+
 version 0.10: Wed Jan 21 10:04:19 CET 2009
 
 	Fixes:

@@ -4,11 +4,11 @@ require 5.008;
 
 WriteMakefile
   ( NAME        => 'Geo::Point'
-  , VERSION     => '0.10'
+  , VERSION     => '0.90'
   , PREREQ_PM   =>
      { Test::More    => 0.47
      , Geo::Distance => 0.06
-     , Geo::Proj4    => 0.96
+     , Geo::Proj4    => 1.01
      , Math::Polygon => 0.003
      , Math::Trig    => 1.00
      }
@@ -32,7 +32,7 @@ EMAIL           = perl@overmeer.net
 WEBSITE         = http://perl.overmeer.net/geo/
 
 # for HTML
-EXTENDS		= ../MathPolygon:../GeoProj4:../GeoWKT:../GeoGML:../Geo139:../GeoEOP:../XMLCompile:../XMLCache:../Envisat
+EXTENDS		= ../MathPolygon:../GeoProj4:../GeoWKT:../GeoGML:../Geo139:../GeoEOP:../XMLCompile:../XMLCache:../Envisat:../Landsat
 HTML_OUTPUT     = ../public_html/geo/html
 HTML_DOCROOT    = /geo/html
 HTML_PACKAGE    = ../public_html/geo/htmlpkg

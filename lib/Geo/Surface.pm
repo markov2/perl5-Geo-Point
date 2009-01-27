@@ -75,7 +75,7 @@ sub new(@)
     my $proj = $args{proj};
     unless($proj)
     {   my $s = first { UNIVERSAL::isa($_, 'Geo::Shape') } @components;
-        $proj = $s->proj if $s;
+        $args{proj} = $proj = $s->proj if $s;
     }
 
     my @surfaces;
