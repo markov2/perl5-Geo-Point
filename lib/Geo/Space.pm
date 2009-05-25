@@ -137,30 +137,7 @@ sub in($)
 }
 
 =section Geometry
-
-=method equal OTHER, [TOLERANCE]
-Detailed calculation whether two spaces are equal is a lot of
-work.  Therefore, only exactly equal spaces are considered equivalent:
-even the order of the components must be the same.
 =cut
-
-sub equal($;$)
-{   my ($self, $other, $tolerance) = @_;
-
-    my $nr   = $self->nrComponents;
-    return 0 if $nr != $other->nrComponents;
-
-    my $proj = $other->proj;
-    for(my $compnr = 0; $compnr < $nr; $compnr++)
-    {   my $own = $self->component($compnr);
-        my $his = $other->component($compnr);
-
-        $own->equal($his, $tolerance)
-            or return 0;
-    }
-
-    1;
-}
 
 sub bbox()
 {   my $self = shift;

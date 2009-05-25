@@ -17,15 +17,11 @@ Geo::Surface - A surface description.
 
 =chapter SYNOPSIS
 
- my $island1 = Geo::Line->filled(...);
- my $island2 = Geo::Surface->new(...);
- my $islands = Geo::Surface->new($island1, $island2)
+ my $island = Geo::Surface->new($outer, $lake1, $lake2);
 
 =chapter DESCRIPTION
-In this context, a "surface" is defined as a set of filled areas with
-possible enclosures in one projection system.  Some set of islands
-can be kept as one surface.  Or the data of a country: mainland,
-islands and lakes.  Or multiple tiles of one image.
+In this context, a "surface" is defined as one filled area with
+possible enclosures in one projection system.
 
 =chapter OVERLOAD
 
@@ -33,18 +29,17 @@ islands and lakes.  Or multiple tiles of one image.
 
 =section Constructors
 
-=c_method new [COMPONENTS], [OPTIONS]
+=c_method new (SURFACE|(OUTER,INNER,...)), [OPTIONS]
 When called as instance method, some defaults are copied from the
 object where the call is made upon.
 
-COMPONENTS are M<Math::Polygon>, M<Math::Polygon::Surface>, M<Geo::Line>,
-and M<Geo::Surface> objects.  When an ARRAY is specfied as COMPONENT,
-it will be used to instantiate a M<Math::Polygon::Surface> object.
-In case of a M<Geo::Surface>, the included polygons are translated to
-the specified projection.
+You may either provide a M<Math::Polygon::Surface> SURFACE, or a LIST
+of lines.  In the latter case, the first line is the OUTER polygon of
+the surface, and the other are all INNER enclosures: lakes.  Lines
+are and M<Geo::Line>, M<Math::Polygon> objects, or ARRAY of points.
 
 If no projection is specified, then the projection of the first
-component will be used to project all components to.
+Geo-encoded line will be used.
 
 =warning Geo::Line is should be filled
 When M<Geo::Line> objects are used to compose a surface, each of them
@@ -57,9 +52,9 @@ surface description.
 
 sub new(@)
 {   my $thing = shift;
-    my @components;
-    push @components, shift while ref $_[0];
-    @components or return ();
+    my @lines;
+    push @lines, shift while ref $_[0];
+    @lines or return ();
 
     my %args  = @_;
 
@@ -74,70 +69,64 @@ sub new(@)
 
     my $proj = $args{proj};
     unless($proj)
-    {   my $s = first { UNIVERSAL::isa($_, 'Geo::Shape') } @components;
+    {   my $s = first { UNIVERSAL::isa($_, 'Geo::Shape') } @lines;
         $args{proj} = $proj = $s->proj if $s;
     }
 
-    my @surfaces;
-    foreach my $c (@components)
-    {
-        if(ref $c eq 'ARRAY')
-        {   my $outer = Math::Polygon->new(points => $c);
-            push @surfaces, Math::Polygon::Surface->new(outer => $outer);
+    my $mps;
+    if(@lines==1 && UNIVERSAL::isa($_, 'Math::Polygon::Surface'))
+    {   $mps = shift @lines;
+    }
+    else
+    {   my @polys;
+        foreach (@lines)
+        {   push @polys
+              , UNIVERSAL::isa($_, 'Geo::Line'    ) ? [$_->in($proj)->points]
+              : UNIVERSAL::isa($_, 'Math::Polygon') ? $_
+              : UNIVERSAL::isa($_, 'ARRAY'        ) ? Math::Polygon->new(@$_)
+              : croak "ERROR: Do not known what to do with $_";
         }
-        elsif(UNIVERSAL::isa($c, 'Math::Polygon'))
-        {   push @surfaces, Math::Polygon::Surface->new(outer => $c);
-        }
-        elsif(UNIVERSAL::isa($c, 'Math::Polygon::Surface'))
-        {   push @surfaces, $c;
-        }
-        elsif(UNIVERSAL::isa($c, 'Geo::Line'))
-        {   my $outer = $c->in($proj)->points;
-            push @surfaces, Math::Polygon::Surface->new(outer => $outer);
-        }
-        elsif($c->isa('Geo::Surface'))
-        {   push @surfaces, map {$c->in($proj)} $c->components;
-        }
-        else
-        {   confess "ERROR: Do not known what to do with $c";
-        }
+        $mps = Math::Polygon::Surface->new(@polys);
     }
 
-    $args{components} = \@surfaces;
+    $args{_mps} = $mps;
     $thing->SUPER::new(%args);
 }
 
 sub init($)
 {   my ($self, $args) = @_;
     $self->SUPER::init($args);
-    $self->{GS_comp} = $args->{components};
+    $self->{GS_mps} = $args->{_mps};
     $self;
 }
 
 =section Attributes
 
-=method components
-Returns a list of M<Math::Polygon::Surface> objects, together forming
-the surface.
+=method outer
+Returns the outer M<Math::Polygon>.
+=method geo_outer
+Returns the outer polygon as M<Geo::Line> object.
+
+=method inner
+Returns a LIST of enclosed M<Math::Polygon> objects.
+=method geo_inner
+Returns a LIST of enclosed polygons, converted to M<Geo::Line> objects.
+
 =cut
 
-sub components() { @{shift->{GS_comp}} }
+sub outer() { shift->{GS_mps}->outer }
+sub inner() { shift->{GS_mps}->inner }
 
-=method component INDEX, [INDEX, ...]
-Returns the component (or components) with the specified INDEX(es). One
-M<Math::Polygon::Surface> in scalar context, and multiple in list context.
-=cut
-
-sub component(@)
+sub geo_outer()
 {   my $self = shift;
-    wantarray ? $self->{GS_comp}[shift] : @{$self->{GS_comp}}[@_];
+    Geo::Line->new(points => [$self->outer->points], proj => $self->proj);
 }
 
-=method nrComponents
-Returns the number of components.
-=cut
-
-sub nrComponents() { scalar @{shift->{GS_comp}} }
+sub geo_inner()
+{   my $self = shift;
+    my $proj = $self->proj;
+    map { Geo::Line->new(points => [$_->points], proj => $proj) } $self->inner;
+}
 
 =section Projections
 =cut
@@ -146,65 +135,42 @@ sub in($)
 {   my ($self, $projnew) = @_;
     return $self if ! defined $projnew || $projnew eq $self->proj;
 
-    my @surfaces;
-    foreach my $old ($self->components)
-    {   my @newrings;
-        foreach my $ring ($old->outer, $old->inner)
-        {   ($projnew, my @points) = $self->projectOn($projnew, $ring->points);
-            push @newrings, @points
-             ? (ref $ring)->new(proj => $projnew, points => \@points) : $ring;
-        }
-        push @surfaces, (ref $old)->new(@newrings, proj => $projnew);
+    my @newrings;
+    foreach my $ring ($self->outer, $self->inner)
+    {   (undef, my @points) = $self->projectOn($projnew, $ring->points);
+        push @newrings, \@points;
     }
-  
-    $self->new(@surfaces, proj => $projnew);
+    my $mp = Math::Polygon::Surface->new(@newrings);
+    (ref $self)->new($mp, proj => $projnew);
 }
 
 =section Geometry
 
-=method equal OTHER, [TOLERANCE]
-Detailed calculation whether two surfaces are equal is a lot of
-work.  Therefore, only exactly equal surface descriptions are
-considered equivalent.
-=cut
-
-sub equal($;$)
-{   my ($self, $other, $tolerance) = @_;
-
-    my $nr   = $self->nrComponents;
-    return 0 if $nr != $other->nrComponents;
-
-    my $proj = $other->proj;
-    for(my $compnr = 0; $compnr < $nr; $compnr++)
-    {   my $own = $self->component($compnr);
-        my @own = $self->projectOn($proj, $own->points);
-
-        $other->component($compnr)->equal(\@own, $tolerance)
-            or return 0;
-    }
-
-    1;
-}
-
 =method bbox
-The bounding box of the combined polygons.
+The bounding box of outer surface polygon.
 =cut
 
-sub bbox() {  polygon_bbox map { $_->outer->points } shift->components }
+sub bbox() { polygon_bbox $_->outer->points }
 
 =method area
-Returns the area enclosed by the combined components.  Only useful when
-the points are in some orthogonal projection.
+Returns the area enclosed by the outer polygon, minus the erea of
+the enclosures.  Only useful when the points are in some orthogonal
+projection.
 =cut
 
-sub area() { sum map { $_->area } shift->components }
+sub area()
+{   my $self = shift;
+    my $area = $self->outer->area;
+    $area   -= $_->area for $self->inner;
+    $area;
+}
 
 =method perimeter
-The length of the outer polygons of all components. Only useful in a
-orthogonal coordinate systems.
+The length of the outer polygon. Only useful in a orthogonal
+coordinate systems.
 =cut
 
-sub perimeter() { sum map { $_->perimeter } shift->components }
+sub perimeter() { shift->outer->perimeter }
 
 =section Display
 
@@ -225,13 +191,9 @@ sub toString(;$)
         $surface = $self;
     }
 
-    my @polys;
-    foreach my $c ($surface->components)
-    {   push @polys, 'aap';
-    }
-
-    local $" = ")\n  (";
-    "surface[$proj]\n  (@polys)\n";
+    my $mps = $self->{GS_mps}->string;
+    $mps    =~ s/\n-/)\n -(/;
+    "surface[$proj]\n  ($mps)\n";
 }
 *string = \&toString;
 

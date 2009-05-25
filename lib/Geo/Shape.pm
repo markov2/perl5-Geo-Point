@@ -38,15 +38,12 @@ distribution.
 Returns a string "$proj($lat,$long)" or "$proj($x,$y)".  The C<$proj>
 is the label you have assigned to the projection.  See M<projection()>.
 
-=overload '=='
-
 =overload 'bool' (truth value)
 A point is always true: defined.
 
 =cut
 
 use overload '""'     => 'string'
-           , '=='     => 'equal'
            , bool     => sub {1}
            , fallback => 1;
 
@@ -197,25 +194,6 @@ sub distance($;$)
     die "ERROR: distance calculation not implemented between a "
       . ref($self) . " and a " . ref($other);
 }
-
-=method equal OBJECT, [TOLERANCE]
-Same object, maybe defined as different object, maybe in a different
-coordinate system.  When the coordinate systems are equivalent, no
-conversions are done.  Otherwise, the second OBJECT is converted into
-the coordinate system of the callee.
-
-=cut
-
-sub equal($;$)
-{ confess "INTERNAL: equal() not implemented for ".ref(shift) }
-
-=method sameAs OTHER, TOLERANCE
-See M<equal()>.  This method expects the OTHER object to have the same
-projection as the object at hand.
-=cut
-
-sub sameAs($$)
-{ confess "INTERNAL: sameAs() not implemented for ".ref(shift) }
 
 =ci_method bboxRing [XMIN, YMIN, XMAX, YMAX, [PROJ]]
 Returns a M<Geo::Line> which describes the outer bounds of the

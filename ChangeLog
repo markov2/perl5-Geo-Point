@@ -1,5 +1,11 @@
 Revision history for Perl extension Geo::Point
 
+version 0.91: Mon May 25 14:31:47 CEST 2009
+
+	Fixes:
+
+	- the Geo::Surface was very seriously broken.
+
 version 0.90: Tue Jan 27 16:45:11 CET 2009
 
 	Fixes:

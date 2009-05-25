@@ -12,6 +12,7 @@ lib/Geo/Surface.pm
 t/09proj.t
 t/10dms.t
 t/11point.t
+t/12surface.t
 t/20pstr.t
 t/21lstr.t
 t/22rstr.t
