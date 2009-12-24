@@ -4,7 +4,7 @@ require 5.008;
 
 WriteMakefile
   ( NAME        => 'Geo::Point'
-  , VERSION     => '0.91'
+  , VERSION     => '0.92'
   , PREREQ_PM   =>
      { Test::More    => 0.47
      , Geo::Distance => 0.06

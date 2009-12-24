@@ -28,9 +28,9 @@ Geo::Proj - Handling projections
  my $point_wgs84= Geo::Point->latlong(56.12, 4.40, 'wgs84');
  my $point_wgs84= Geo::Point->latlong(56.12, 4.40, $wgs84);
 
- my $point_clrk = $point_wgs84->to($clrk);
- my $point_clrk = Geo::Proj->to($clrk, $point_wgs84);
- my $point_clrk = Geo::Proj->to('clark66', $point_wgs84);
+ my $point_clrk = $point_wgs84->in($clrk);
+ my $point_clrk = Geo::Proj->to($wgs84, $clrk, $point_wgs84);
+ my $point_clrk = Geo::Proj->to($wgs84, 'clark66', $point_wgs84);
 
 =chapter DESCRIPTION
 A point on Earth's surface can be represented in many different coordinate
@@ -246,10 +246,14 @@ sub dumpProjections(;$)
     }
 }
 
-=ci_method to [PROJ|NICK], PROJ|NICK, POINT|ARRAY_OF_POINTS
+=ci_method to [PROJ|NICK], PROJ|NICK, POINT|ARRAY-OF-POINTS
 Expects an Geo::Proj to project the POINT or POINTS to.  The work
 is done by M<Geo::Proj4::transform()>.  As class method, you have to
 specify two nicks or projections.
+
+Be warned that this M<to()> method expects POINTs which are
+B<not> M<Geo::Point> objects, but which themselves are an ARRAY
+containing X,Y and optionally a Z coordinate.
 
 =examples
  my $p2 = $wgs84->to('utm31-wgs84', $p1);
@@ -261,7 +265,7 @@ sub to($@)
 {   my $thing   = shift;
     my $myproj4 = ref $thing ? $thing->proj4 : __PACKAGE__->proj4(shift);
     my $toproj4 = __PACKAGE__->proj4(shift);
-    $myproj4->transform($toproj4, @_);
+    $myproj4->transform($toproj4, shift);
 }
 
 =section UTM

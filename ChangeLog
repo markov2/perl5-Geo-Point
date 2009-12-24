@@ -1,5 +1,12 @@
 Revision history for Perl extension Geo::Point
 
+version 0.92: Thu Dec 24 12:08:04 CET 2009
+
+	Fixes:
+
+	- synopsis mistakes in Geo::Proj, spotted by
+	  rt.cpan.org#47953 [Don Reid]
+
 version 0.91: Mon May 25 14:31:47 CEST 2009
 
 	Fixes:
