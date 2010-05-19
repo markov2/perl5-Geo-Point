@@ -1,5 +1,19 @@
 Revision history for Perl extension Geo::Point
 
+version 0.93: Wed May 19 23:31:05 CEST 2010
+
+	Fixes:
+
+	- ::Surface::geo_outer() and geo_inner() renamed to ::geoOuter()
+	  and ::geoInner(), to be consequent with naming convensions.
+	  Older names still supported but not documented anymore.
+
+	- Geo::Proj::zoneForUTM() used 'zone' as proj4 option, where
+	  it should be '+zone'. [Michael R. Davis]
+
+	- Geo::Proj:zoneForUTM() miscalculated zones with negative
+	  longitudes. [Michael R. Davis]
+
 version 0.92: Thu Dec 24 12:08:04 CET 2009
 
 	Fixes:

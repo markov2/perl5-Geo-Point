@@ -308,7 +308,7 @@ sub zoneForUTM($)
      : undef;
 
     my $meridian = int($long/6)*6 + ($long < 0 ? -3 : +3);
-    $zone      ||= int($meridian/6) + 180/6 +1;
+    $zone      ||= int(($meridian+180)/6) +1;
  
     my $letter
      = ($lat < -80 || $lat > 84) ? ''
@@ -353,15 +353,14 @@ sub UTMprojection($$)
 {   my ($class, $base, $zone) = @_;
 
     $base   ||= $class->defaultProjection;
-    my $datum = UNIVERSAL::isa($base, __PACKAGE__) ? $base->proj4->datum:$base;
+    my $datum = UNIVERSAL::isa($base, __PACKAGE__) ? $base->proj4->datum :$base;
     $datum  ||= 'wgs84';
 
-    my $label = "utm$zone-\L${datum}\E";
+    my $label = "utm$zone-\L$datum\E";
+    my $proj  = "+proj=utm +zone=$zone +datum=\U$datum\E"
+              . " +ellps=\U$datum\E +units=m +no_defs";
 
-    Geo::Proj->new
-     ( nick  => $label
-     , proj4 => "+proj=utm +datum=\U$datum\E zone=$zone"
-     );
+    Geo::Proj->new(nick => $label, proj4 => $proj);
 }
 
 1;

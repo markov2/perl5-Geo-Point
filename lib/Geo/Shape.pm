@@ -55,7 +55,7 @@ use overload '""'     => 'string'
 Create a new object.
 
 =option  proj       LABEL
-=default proj       <see M<Geo::Proj::defaultProjection()>
+=default proj       see M<Geo::Proj::defaultProjection()>
 
 =cut
 

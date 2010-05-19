@@ -104,12 +104,12 @@ sub init($)
 
 =method outer
 Returns the outer M<Math::Polygon>.
-=method geo_outer
+=method geoOuter
 Returns the outer polygon as M<Geo::Line> object.
 
 =method inner
 Returns a LIST of enclosed M<Math::Polygon> objects.
-=method geo_inner
+=method geoInner
 Returns a LIST of enclosed polygons, converted to M<Geo::Line> objects.
 
 =cut
@@ -117,16 +117,20 @@ Returns a LIST of enclosed polygons, converted to M<Geo::Line> objects.
 sub outer() { shift->{GS_mps}->outer }
 sub inner() { shift->{GS_mps}->inner }
 
-sub geo_outer()
+sub geoOuter()
 {   my $self = shift;
     Geo::Line->new(points => [$self->outer->points], proj => $self->proj);
 }
 
-sub geo_inner()
+
+sub geoInner()
 {   my $self = shift;
     my $proj = $self->proj;
     map { Geo::Line->new(points => [$_->points], proj => $proj) } $self->inner;
 }
+
+*geo_outer = \&geoOuter;
+*geo_inner = \&geoInner;
 
 =section Projections
 =cut
