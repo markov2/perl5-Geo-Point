@@ -154,7 +154,7 @@ sub in($)
 The bounding box of outer surface polygon.
 =cut
 
-sub bbox() { polygon_bbox $_->outer->points }
+sub bbox() { polygon_bbox shift->outer->points }
 
 =method area
 Returns the area enclosed by the outer polygon, minus the erea of

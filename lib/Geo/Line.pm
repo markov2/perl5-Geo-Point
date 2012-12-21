@@ -155,7 +155,7 @@ This routine is very smart.  It understands
 =examples bbox from string
  
  my $x = '5n 2n 3e e12';       # coordinates in any order
- my $x = '5e , 2n, 3n, e12';    # coordinates in any order
+ my $x = '5e , 2n, 3n, e12';   # coordinates in any order
  my $x = '2.12-23.1E, N1-4';   # stretches
  my $x = 'wgs84: 2-5e, 1-8n';  # starts with projection
  my $x = 'wgs84: e2d12' -3d, n1, n7d12'34"';
@@ -234,7 +234,7 @@ sub bboxFromString($;$)
         }
     }
 
-    die "ERROR: expect to two lats and two longs, but got "
+    die "ERROR: expect two lats and two longs, but got "
       . @lats."/".@longs."\n"  if @lats!=2;
 
     (min(@lats), min(@longs), max(@lats), max(@longs), $nick);

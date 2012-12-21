@@ -1,5 +1,11 @@
 Revision history for Perl extension Geo::Point
 
+version 0.94: Fri Dec 21 12:19:47 CET 2012
+
+	Fixes:
+
+	- fix ::Surface::bbox()
+
 version 0.93: Wed May 19 23:31:05 CEST 2010
 
 	Fixes:
