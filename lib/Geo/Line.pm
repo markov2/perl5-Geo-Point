@@ -34,7 +34,7 @@ to use the same projection.
 
 =section Constructors
 
-=ci_method new [OPTIONS], [POINTS], [OPTIONS]
+=ci_method new [%options]
 When called as instance method, the projection, ring, and filled attributes
 are taken from the initiator, like a clone with modification.
 
@@ -60,7 +60,8 @@ shape.
  my $line  = Geo::Line->new
    ( points => [$point, [3,4], [5,6], $point]
    , ring   => 1
-   )'
+   );
+ my $clone = $line->new(filled => 1);
 
 =cut
 
@@ -82,7 +83,7 @@ sub new(@)
     ref $thing
         or return shift->Math::Polygon::new(%args);
 
-    # instance method
+    # instance method: clone!
     $thing->Math::Polygon::new
       ( ring   => $thing->{GL_ring}
       , filled => $thing->{GL_fill}
@@ -103,9 +104,9 @@ sub init($)
     $self;
 }
 
-=ci_method line POINTS, OPTIONS
+=ci_method line $points, %options
 construct a line, which will probably not have the same begin and end
-point.  The POINTS are passed as M<new(points)>, and the other OPTIONS
+point.  The $points are passed as M<new(points)>, and the other %options
 are passed to M<new()> as well.
 =cut
 
@@ -116,7 +117,7 @@ sub line(@)
     $thing->new(points => \@points, @_);
 }
 
-=ci_method ring POINTS, OPTIONS
+=ci_method ring $points, %options
 The first and last point will be made the same: if not yet, than a reference
 to the first point is appended to the list.  A "ring" does not cover the
 internal.
@@ -133,8 +134,8 @@ sub ring(@)
     $self;
 }
 
-=ci_method filled POINTS, OPTIONS
-The POINTS form a M<ring()> and the filled is part of the geometrical
+=ci_method filled $points, %options
+The $points form a M<ring()> and the filled is part of the geometrical
 shape.
 =cut
 
@@ -143,8 +144,8 @@ sub filled(@)
     $thing->ring(@_, filled => 1);
 }
 
-=c_method bboxFromString STRING, {PROJECTION]
-Create a square from the STRING.  The coordinates can be separated by
+=c_method bboxFromString $string, [$projection]
+Create a square from the $string.  The coordinates can be separated by
 a comma (preferrably), or blanks.  When the coordinates end on NSEW, the
 order does not matter, otherwise lat-long or xy order is presumed.
 
@@ -241,7 +242,7 @@ sub bboxFromString($;$)
 }
 
 
-=c_method ringFromString STRING, [PROJECTION]
+=c_method ringFromString $string, [$projection]
 Calls M<bboxFromString()> and then produces a ring object from than.
 Don't forget the C<eval> when you call this method.
 =cut
@@ -274,8 +275,8 @@ sub geopoints()
         $self->points;
 }
 
-=method geopoint INDEX, [INDEX, ..]
-Returns the M<Geo::Point> for the point with the specified INDEX or
+=method geopoint $index, [$index, ..]
+Returns the M<Geo::Point> for the point with the specified $index or
 indices.
 =cut
 
@@ -313,6 +314,7 @@ to belong to the shape.
 
 sub isFilled() { shift->{GL_fill} }
 
+#----------------
 =section Projections
 =cut
 
@@ -326,6 +328,7 @@ sub in($)
     @points ? $self->new(points => \@points, proj => $realproj) : $self;
 }
 
+#----------------
 =section Geometry
 =cut
 
@@ -387,8 +390,8 @@ The length of the line, only useful in a orthogonal coordinate system
 
 sub length() { shift->Math::Polygon::perimeter }
 
-=method clip (XMIN,XMAX,YMIN,YMAX)|OBJECT
-Clip the shape to the bounding box of OBJECT, or the boxing parameters
+=method clip <$xmin,$xmax,$ymin,$ymax>|$object
+Clip the shape to the bounding box of $object, or the boxing parameters
 specified.  A list of M<Geo::Line> objects is returned if anything is
 inside the object.
 
@@ -405,13 +408,13 @@ sub clip(@)
     $self->isFilled ? $self->fillClip1(@bbox) : $self->lineClip(@bbox);
 }
 
+#----------------
 =section Display
 
-=method string [PROJECTION]
+=method toString [$projection]
 Returns a string representation of the line, which is also used for
-stringification.
+stringification.  The old method named C<string> is deprecated.
 
-=examples
 =cut
 
 sub toString(;$)

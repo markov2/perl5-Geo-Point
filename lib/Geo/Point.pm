@@ -35,7 +35,7 @@ represented.
 
 One of the most confusing things when handling geometrical data, is
 that sometimes latlong, sometimes xy are used: horizontal and vertical
-organization reversed.  This packages tries to hide this from your
+organization reversed.  This package tries to hide this from your
 program by providing abstract accessors M<latlong()>, M<longlat()>,
 M<xy()>, and M<yx()>.
 
@@ -43,7 +43,7 @@ M<xy()>, and M<yx()>.
 
 =section Constructors
 
-=c_method new OPTIONS
+=c_method new %options
 
 =option  latitude  COORDINATE
 =default latitude  undef
@@ -78,14 +78,14 @@ sub init($)
     $self;
 }
 
-=ci_method latlong [LAT, LONG, [PROJ] ] | [PROJ]
+=ci_method latlong [$lat, $long, [$proj] ] | [$proj]
 When called as class method, you create a new point.  Provide a LATitude
 and LONGitude. The optional PROJection tells in which coordinate system.
 
 As instance method, the latitude and longitude are reported.  You
-can ask it to be translated into the PROJ coordinate system first.
+can ask it to be translated into the $proj coordinate system first.
 
-When PROJ is undefined, none is presumed. The project must be specified
+When $proj is undefined, none is presumed. The project must be specified
 as string, which referse to a projection defined by M<Geo::Proj>.
 See also M<longlat()>, M<xy()>, and M<yx()>.
 
@@ -112,7 +112,7 @@ sub latlong(@)
     $thing->new(lat => shift, long => shift, proj => shift);
 }
 
-=ci_method longlat [LONG, LAT, [PROJ] ] | [PROJ]
+=ci_method longlat [$long, $lat, [$proj] ] | [$proj]
 Like M<latlong()>, but with the coordinates reversed.  Some applications
 prefer this.
 =cut
@@ -130,7 +130,7 @@ sub longlat(@)
     $thing->new(long => shift, lat => shift, proj => shift);
 }
 
-=ci_method xy [X, Y, [PROJ] ] | [PROJ]
+=ci_method xy [$x, $y, [$proj] ] | [$proj]
 Like M<latlong()> but now for carthesian projections.  Usually, the coordinate
 order is reversed.  See also M<yx()>.
 =cut
@@ -149,7 +149,7 @@ sub xy(@)
     $thing->new(x => shift, y => shift, proj => shift);
 }
 
-=ci_method yx [Y, X, [PROJ] ] | [PROJ]
+=ci_method yx [$y, $x, [$proj] ] | [$proj]
 Like M<latlong()> but now for carthesian projections.  Usually, the
 coordinate order is reversed.  See also M<xy()>.
 =cut
@@ -168,8 +168,8 @@ sub yx(@)
     $thing->new(y => shift, x => shift, proj => shift);
 }
 
-=c_method fromString STRING, {PROJECTION]
-Create a new point from a STRING.  The coordinates can be separated by
+=c_method fromString $string, [$projection]
+Create a new point from a $string.  The coordinates can be separated by
 a comma (preferrably), or blanks.  When the coordinates end on NSEW, the
 order does not matter, otherwise lat-long or xy order is presumed.
 
@@ -322,6 +322,7 @@ sub fromString($;$)
     ();
 }
 
+#----------------
 =section Accessors
 The accessors only work correctly when you are sure that the point is
 in the right coordinate systems.
@@ -342,6 +343,7 @@ sub lat()       {shift->{GP_y}}
 sub x()         {shift->{GP_x}}
 sub y()         {shift->{GP_y}}
 
+#----------------
 =section Projections
 
 =cut
@@ -374,6 +376,7 @@ sub normalize()
     $self;
 }
 
+#----------------
 =section Geometry
 
 =method bbox
@@ -394,9 +397,9 @@ Always returns zero.
 
 sub perimeter() { 0 }
 
-=method distancePointPoint GEODIST, UNITS, POINT
-Compute the distance between the current point and some other POINT in
-UNITS.  The GEODIST object will do the calculations.  See M<distance()>.
+=method distancePointPoint $geodist, $units, $point
+Compute the distance between the current point and some other $point in
+$units.  The $geodist object will do the calculations.  See M<distance()>.
 =cut
 
 # When two points are within one UTM zone, this could be done much
@@ -407,17 +410,17 @@ sub distancePointPoint($$$)
 
     my $here  = $self->in('wgs84');
     my $there = $other->in('wgs84');
-    $geodist->distance_calc($units, $here->latlong, $there->latlong);
+    $geodist->distance($units, $here->latlong, $there->latlong);
 }
 
-=method sameAs OTHER, TOLERANCE
-=error can only compare a point to an other Geo::Point
+=method sameAs $other, $tolerance
+=error can only compare a point to another Geo::Point
 =cut
 
 sub sameAs($$)
 {   my ($self, $other, $e) = (shift, shift);
 
-    croak "ERROR: can only compare a point to an other Geo::Point"
+    croak "ERROR: can only compare a point to another Geo::Point"
         unless $other->isa('Geo::Point');
 
     # may be latlong or xy, doesn't matter: $e is corrected for that
@@ -426,11 +429,11 @@ sub sameAs($$)
     abs($x1-$x2) < $e && abs($y1-$y2) < $e;
 }
 
-=method inBBox OBJECT
+=method inBBox $object
 Returns a true value if this point is inside the bounding box of
-the specified OBJECT.  The borders of the bbox are included.  This is
+the specified $object.  The borders of the bbox are included.  This is
 relatively fast to check, even for complex objects.  When the projections
-differ, the point is translated into the OBJECT's coordinate system,
+differ, the point is translated into the $object's coordinate system,
 because that one must stay square.
 
 =cut
@@ -442,6 +445,7 @@ sub inBBox($)
     $xmin <= $x && $x <= $xmax && $ymin <= $y && $y <= $ymax
 }
 
+#----------------
 =section Display
 
 =method coordsUsualOrder
@@ -467,7 +471,7 @@ sub coords()
    sprintf "%.4f %.4f", $a, $b;
 }
 
-=method toString [PROJECTION]
+=method toString [$projection]
 Returns a string representation of the point, which is also used for
 stringification.  The default projection is the one of the point.
 =examples
@@ -493,9 +497,9 @@ sub toString(;$)
 }
 *string = \&toString;
 
-=method dms [PROJECTION]
+=method dms [$projection]
 Show the point as DMS value-pair.  You must be sure that the coordinate
-is a projection for which is it usefull to represent the values in DMS.
+is a projection for which is it useful to represent the values in DMS.
 In SCALAR context, one string is returned.  In LIST context, the values
 are returned separately in latlong order.
 
@@ -513,7 +517,7 @@ sub dms(;$)
     wantarray ? ($dmslat, $dmslong) : "$dmslat, $dmslong";
 }
 
-=method dm [PROJECTION]
+=method dm [$projection]
 Like M<dms()>, but doesn't show seconds.
 =cut
 
@@ -526,7 +530,7 @@ sub dm(;$)
     wantarray ? ($dmlat, $dmlong) : "$dmlat, $dmlong";
 }
 
-=method dmsHTML [PROJECTION]
+=method dmsHTML [$projection]
 Like M<dms()>, but all character which are troublesome for HTML are
 translated into character codes.
 =cut
@@ -544,7 +548,7 @@ sub dmsHTML(;$)
     wantarray ? @both : "$both[0], $both[1]";
 }
 
-=method dmHTML [PROJECTION]
+=method dmHTML [$projection]
 Like M<dmsHTML()>, but does not show seconds.
 =cut
 
@@ -562,7 +566,7 @@ sub dmHTML(;$)
 
 =method moveWest
 Move a point from the eastern calculations into the western calculations,
-resulting in a value below -180.  This is usefull when this point is part
+resulting in a value below -180.  This is useful when this point is part
 of a larger construct, like the corners of a satellite image, which are
 both sides of the -180 meridian.
 

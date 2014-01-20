@@ -29,13 +29,13 @@ possible enclosures in one projection system.
 
 =section Constructors
 
-=c_method new (SURFACE|(OUTER,INNER,...)), [OPTIONS]
+=c_method new <$surface|<$outer,$inner,...>>, [%options]
 When called as instance method, some defaults are copied from the
 object where the call is made upon.
 
-You may either provide a M<Math::Polygon::Surface> SURFACE, or a LIST
-of lines.  In the latter case, the first line is the OUTER polygon of
-the surface, and the other are all INNER enclosures: lakes.  Lines
+You may either provide a M<Math::Polygon::Surface> $surface, or a LIST
+of lines.  In the latter case, the first line is the $outer polygon of
+the surface, and the other are all $inner enclosures: lakes.  Lines
 are and M<Geo::Line>, M<Math::Polygon> objects, or ARRAY of points.
 
 If no projection is specified, then the projection of the first
@@ -178,7 +178,7 @@ sub perimeter() { shift->outer->perimeter }
 
 =section Display
 
-=method toString [PROJECTION]
+=method toString [$projection]
 Returns a string representation of the line, which is also used for
 stringification.
 

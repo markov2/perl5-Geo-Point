@@ -1,4 +1,4 @@
-#!/usr/bin/perl -T
+#!/usr/bin/env perl
 #
 # Test contruction of a point
 #
@@ -8,7 +8,7 @@ use warnings;
 
 use lib qw(. lib tests ../MathPolygon/lib ../../MathPolygon/lib);
 
-use Test::More tests => 39;
+use Test::More tests => 42;
 
 use Geo::Point;
 use Geo::Proj;
@@ -90,4 +90,15 @@ is($p->string, 'point[utm-31](5.0000 4.0000)');
 
 is($p->x, 5);
 is($p->y, 4);
+
+#
+# distance
+#
+
+my $p1 = $gp->latlong(0, 1);
+my $p2 = $gp->latlong(1, 1);
+cmp_ok(abs($p1->distance($p2, 'nautical mile') - 60), '<', 0.1);
+
+isnt($p1->distance($p2, 'degrees'), 0);
+isnt($p1->distance($p2, 'radians'), 0);
 

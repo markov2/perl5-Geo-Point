@@ -51,7 +51,7 @@ use overload '""'     => 'string'
 
 =section Constructors
 
-=c_method new OPTIONS
+=c_method new %options
 Create a new object.
 
 =option  proj       LABEL
@@ -95,9 +95,9 @@ sub proj4()
 
 =section Projections
 
-=method in LABEL|'utm'
+=method in $label|'utm'
 The coordinates of this point in a certain projection, refered to with
-the LABEL.  The projection is defined with M<new()>.  When simply
+the $label.  The projection is defined with M<new()>.  When simply
 'utm' is provided, the best UTM zone is selected.
 
 In LIST context, the coordinates are returned.  In SCALAR context,
@@ -120,11 +120,11 @@ a new object is returned.
 
 sub in($) { croak "ERROR: in() not implemented for a ".ref(shift) }
 
-=method projectOn NICK, POINTS
-The POINTS are ARRAYS with each an X and Y coordinate of a single
-point in space.  A list of transformed POINTS is returned, which is empty
-if no change is needed.  The returned list is preceeded by a projection
-NICK which is the result, usually the same as the provided NICK, but in
+=method projectOn $nick, $points
+The $points are ARRAYS with each an X and Y coordinate of a single
+point in space.  A list of transformed $points is returned, which is empty
+if no change is needed.  The returned list is preceded by a projection
+$nick which is the result, usually the same as the provided $nick, but in
 some cases (for instance UTM) it may be different.
 =cut
 
@@ -155,13 +155,13 @@ sub projectOn($@)
 
 =section Geometry
 
-=method distance OBJECT, [UNIT]
+=method distance $object, [$unit]
 Calculate the distance between this object and some other object.
 For many combinations of objects this is not supported or only
 partially supported.
 
 This calculation is performed with L<Geo::Distance> in accurate mode.
-The default UNIT is kilometers.  Other units are provided in the manual
+The default $unit is kilometers.  Other units are provided in the manual
 page of L<Geo::Distance>.  As extra unit, C<degrees> and C<radians> are
 added as well as the C<km> alias for kilometer.
 
@@ -178,8 +178,8 @@ sub distance($;$)
     unless($geodist)
     {   $geodist = Geo::Distance->new;
         $geodist->formula('hsin');
-        $geodist->reg_unit(radians => 1);
-        $geodist->reg_unit(degrees => deg2rad(1));
+        $geodist->reg_unit(1 => 'radians');
+        $geodist->reg_unit(deg2rad(1) => 'degrees');
         $geodist->reg_unit(km => 1, 'kilometer');
     }
 
@@ -195,7 +195,7 @@ sub distance($;$)
       . ref($self) . " and a " . ref($other);
 }
 
-=ci_method bboxRing [XMIN, YMIN, XMAX, YMAX, [PROJ]]
+=ci_method bboxRing [$xmin, $ymin, $xmax, $ymax, [$proj]]
 Returns a M<Geo::Line> which describes the outer bounds of the
 object called upon, counter-clockwise and left-bottom first.  As class
 method, you need to specify the limits and the PROJection.
@@ -262,7 +262,7 @@ sub perimeter()
 
 =section Display
 
-=ci_method deg2dms DEGREES, POS, NEG
+=ci_method deg2dms $degrees, $pos, $neg
 =example
  print $point->deg2dms(0.12, 'e', 'w');
  print Geo::Shape->deg2dms(0.12, 'e', 'w');
@@ -294,7 +294,7 @@ sub deg2dms($$$)
     :      sprintf("%d$sign", $d);
 }
 
-=ci_method deg2dm DEGREES, POS, NEG
+=ci_method deg2dm $degrees, $pos, $neg
 Like M<deg2dms()> but without showing seconds.
 =example
  print $point->deg2dm(0.12, 'e', 'w');
@@ -322,7 +322,7 @@ sub deg2dm($$$)
        : sprintf("%d$sign", $d);
 }
 
-=ci_method dms2deg DMS
+=ci_method dms2deg $dms
 Accepts for instance 3d12'24.123, 3d12"E, 3.12314w, n2.14, s3d12",
 -12d34, and returns floating point degrees.
 =cut

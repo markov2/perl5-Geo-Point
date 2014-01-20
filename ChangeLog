@@ -1,5 +1,15 @@
 Revision history for Perl extension Geo::Point
 
+version 0.95: Mon Jan 20 16:54:57 CET 2014
+
+	Fixes:
+	- typos.  rt.cpan.org#82902 [Xavier Guimard]
+	- Geo::Distance integration
+	  rt.cpan.org#92242 [Niko Tyni], http://bugs.debian.org/735744
+
+	Improvements:
+	- new documentation layout
+
 version 0.94: Fri Dec 21 12:19:47 CET 2012
 
 	Fixes:

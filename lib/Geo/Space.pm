@@ -28,11 +28,11 @@ Space can contain anything you like: lines, points, and unrelated polygons.
 
 =section Constructors
 
-=ci_method new [COMPONENTS], [OPTIONS]
+=ci_method new [$components], [%options]
 When called as instance method, some defaults are copied from the
 object where the call is made upon.  Usually called as class method.
 
-COMPONENTS are M<Math::Polygon>, M<Math::Polygon::Surface>,
+$components are M<Math::Polygon>, M<Math::Polygon::Surface>,
 M<Geo::Point>, M<Geo::Line>, M<Geo::Surface>, M<Geo::Space> objects.
 
 =cut
@@ -69,8 +69,8 @@ Returns a list of M<Geo::Shape> objects, all located in this space.
 
 sub components() { @{shift->{GS_comp}} }
 
-=method component INDEX, [INDEX, ...]
-Returns the component (or components) with the specified INDEX(es). One
+=method component $index, [$index, ...]
+Returns the component (or components) with the specified $index(es). One
 M<Geo::Shape> object in scalar context, and multiple in list context.
 =cut
 
@@ -161,7 +161,7 @@ sub perimeter() { sum map { $_->perimeter } shift->components }
 
 =section Display
 
-=method toString [PROJECTION]
+=method toString [$projection]
 Returns a string representation of the line, which is also used for
 stringification.
 
