@@ -78,7 +78,7 @@ sub init($)
     $self;
 }
 
-=ci_method latlong [$lat, $long, [$proj] ] | [$proj]
+=ci_method latlong [ $lat,$long,[$proj] ] | [$proj]
 When called as class method, you create a new point.  Provide a LATitude
 and LONGitude. The optional PROJection tells in which coordinate system.
 
@@ -112,7 +112,7 @@ sub latlong(@)
     $thing->new(lat => shift, long => shift, proj => shift);
 }
 
-=ci_method longlat [$long, $lat, [$proj] ] | [$proj]
+=ci_method longlat [ $long,$lat,[$proj] ] | [$proj]
 Like M<latlong()>, but with the coordinates reversed.  Some applications
 prefer this.
 =cut
@@ -131,7 +131,7 @@ sub longlat(@)
 }
 
 =ci_method xy [$x, $y, [$proj] ] | [$proj]
-Like M<latlong()> but now for carthesian projections.  Usually, the coordinate
+Like M<longlat()> but now for carthesian projections.  Usually, the coordinate
 order is reversed.  See also M<yx()>.
 =cut
 
@@ -174,17 +174,18 @@ a comma (preferrably), or blanks.  When the coordinates end on NSEW, the
 order does not matter, otherwise lat-long or xy order is presumed.
 
 This routine is very smart.  It understands:
- PROJLABEL VALUE VALUE
- PROJLABEL: VALUE VALUE
- PROJLABEL, VALUE, VALUE
- PROJLABEL: VALUE, VALUE
- VALUE VALUE
- VALUE, VALUE
- utm: ZONE, VALUE, VALUE   # also without commas and ':'
- utm: VALUE, VALUE, ZONE   # also without commas and ':'
- utm: VALUE, VALUE         # also without commas and ':'
- ZONE, VALUE, VALUE        # also without commas and ':'
- VALUE, VALUE, ZONE        # also without commas and ':'
+
+  PROJLABEL VALUE VALUE
+  PROJLABEL: VALUE VALUE
+  PROJLABEL, VALUE, VALUE
+  PROJLABEL: VALUE, VALUE
+  VALUE VALUE
+  VALUE, VALUE
+  utm: ZONE, VALUE, VALUE   # also without commas and ':'
+  utm: VALUE, VALUE, ZONE   # also without commas and ':'
+  utm: VALUE, VALUE         # also without commas and ':'
+  ZONE, VALUE, VALUE        # also without commas and ':'
+  VALUE, VALUE, ZONE        # also without commas and ':'
 
 The VALUE must be suitable for projection.  If only two values are
 provided, a C<d>, single or double quote, or trailing/leading C<e>, C<w>,

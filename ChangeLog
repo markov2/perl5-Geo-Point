@@ -1,5 +1,9 @@
 Revision history for Perl extension Geo::Point
 
+version 0.96: Tue Jan 21 14:34:23 CET 2014
+	Improvements:
+	- more work on docs.
+
 version 0.95: Mon Jan 20 16:54:57 CET 2014
 
 	Fixes:
@@ -8,7 +12,7 @@ version 0.95: Mon Jan 20 16:54:57 CET 2014
 	  rt.cpan.org#92242 [Niko Tyni], http://bugs.debian.org/735744
 
 	Improvements:
-	- new documentation layout
+	- change documentation style.
 
 version 0.94: Fri Dec 21 12:19:47 CET 2012
 

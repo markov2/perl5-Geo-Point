@@ -28,7 +28,7 @@ Space can contain anything you like: lines, points, and unrelated polygons.
 
 =section Constructors
 
-=ci_method new [$components], [%options]
+=ci_method new [$components], %options
 When called as instance method, some defaults are copied from the
 object where the call is made upon.  Usually called as class method.
 
@@ -90,7 +90,7 @@ Returns a list of M<Geo::Point> objects, which are defined as separate
 components.
 =cut
 
-sub points()     { grep {$_->isa('Geo::Points')} shift->components }
+sub points()     { grep $_->isa('Geo::Points'), shift->components }
 
 =method onlyPoints
 Returns true when all components are points; M<Geo::Point> objects.
@@ -103,7 +103,7 @@ Returns a list of M<Geo::Line> objects, which are defined as separate
 components.
 =cut
 
-sub lines()      { grep {$_->isa('Geo::Line')} shift->components }
+sub lines()      { grep $_->isa('Geo::Line'), shift->components }
 
 =method onlyLines
 Returns true when all components are lines; M<Geo::Line> objects.
@@ -141,8 +141,8 @@ sub in($)
 
 sub bbox()
 {   my $self = shift;
-    my @bboxes = map { [$_->bbox] } $self->components;
-    polygon_bbox(map { ([$_->[0], $_->[1]], [$_->[2], $_->[3]]) } @bboxes);
+    my @bboxes = map [$_->bbox], $self->components;
+    polygon_bbox(map +([$_->[0], $_->[1]], [$_->[2], $_->[3]]), @bboxes);
 }
 
 =method area
@@ -150,14 +150,14 @@ Returns the area enclosed by the combined components.  Only useful when
 the points are in some orthogonal projection.
 =cut
 
-sub area() { sum map { $_->area } shift->components }
+sub area() { sum map $_->area, shift->components }
 
 =method perimeter
 The length of the outer polygons of all components. Only useful in a
 orthogonal coordinate systems.
 =cut
 
-sub perimeter() { sum map { $_->perimeter } shift->components }
+sub perimeter() { sum map $_->perimeter, shift->components }
 
 =section Display
 

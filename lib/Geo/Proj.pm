@@ -160,7 +160,7 @@ sub name()
     $def->{description};
 }
 
-=ci_method proj4 [$nick|$proj4]
+=ci_method proj4 [ <$nick|$proj4> ]
 Returns the projection library handle (a M<Geo::Proj4>) to be used by this
 component.  As class method, the $nick is specified for a lookup.  In case
 a $proj4 is specified, that is returned.
@@ -188,7 +188,7 @@ sub srid() {shift->{GP_srid}}
 
 =section Projecting
 
-=c_method projection $nick|$proj
+=c_method projection <$nick|$proj>
 Returns the M<Geo::Proj> object, defined with $nick.  In case such an
 object is passed in as $proj, it is returned unaffected.  This method is
 used where in other methods NICKS or $proj can be used as arguments.
@@ -203,7 +203,7 @@ sub projection($)
     UNIVERSAL::isa($which, __PACKAGE__) ? $which : $projections{$which};
 }
 
-=c_method defaultProjection [$nick|$proj]
+=c_method defaultProjection [ <$nick|$proj> ]
 The $nick must be defined with M<new()>.  Returned is the Geo::Proj object
 for the default projection.  The default is the first name created,
 which probably is 'wgs84' (when import() had a chance)
@@ -246,7 +246,7 @@ sub dumpProjections(;$)
     }
 }
 
-=ci_method to [$proj|$nick], $proj|$nick, $point|ARRAY-$of-$points
+=ci_method to [<$proj|$nick>], <$proj|$nick>, $point|ARRAY-of-$points
 Expects an Geo::Proj to project the $point or $points to.  The work
 is done by M<Geo::Proj4::transform()>.  As class method, you have to
 specify two nicks or projections.
@@ -338,7 +338,7 @@ sub bestUTMprojection($;$)
     $thing->UTMprojection($proj, $zone);
 }
 
-=c_method UTMprojection $datum|$proj|undef, $zone
+=c_method UTMprojection <$datum|$proj|undef>, $zone
 The $proj is a M<Geo::Proj> which is used to collect the datum
 information from if no $datum was specified explicitly.  It may also be
 a string which is the name of a datum, as known by proj4.  Undef will

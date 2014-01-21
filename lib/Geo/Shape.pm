@@ -36,7 +36,7 @@ distribution.
 
 =overload '""' (stringification)
 Returns a string "$proj($lat,$long)" or "$proj($x,$y)".  The C<$proj>
-is the label you have assigned to the projection.  See M<projection()>.
+is the nickname you have assigned to the projection.
 
 =overload 'bool' (truth value)
 A point is always true: defined.
@@ -64,7 +64,7 @@ sub new(@) { my $class = shift; (bless {}, $class)->init( {@_} ) }
 sub init($)
 {   my ($self, $args) = @_;
     my $proj = $self->{G_proj}
-             = $args->{proj} || Geo::Proj->defaultProjection->nick;
+      = $args->{proj} || Geo::Proj->defaultProjection->nick;
 
     croak "proj parameter must be a label, not a Geo::Proj object"
         if UNIVERSAL::isa($proj, 'Geo::Proj');
@@ -73,29 +73,23 @@ sub init($)
 }
 
 #---------------------------
-
 =section Attributes
 
 =method proj
-Returns the nickname of the projection used by the component.  Be
-warned: this is not a M<Geo::Point> object, but just a label.
-=cut
-
-sub proj()  {shift->{G_proj} }
+Returns the nickname of the projection used by the component.
+B<Be warned:> this is not a M<Geo::Point> object, but just a label.
 
 =method proj4
 Returns the proj4 object which handles the projection.
 =cut
 
-sub proj4()
-{   Geo::Proj->proj4(shift->{G_proj});
-}
+sub proj()  { shift->{G_proj} }
+sub proj4() { Geo::Proj->proj4(shift->{G_proj}) }
 
 #---------------------------
-
 =section Projections
 
-=method in $label|'utm'
+=method in <$label|'utm'>
 The coordinates of this point in a certain projection, refered to with
 the $label.  The projection is defined with M<new()>.  When simply
 'utm' is provided, the best UTM zone is selected.
@@ -120,12 +114,12 @@ a new object is returned.
 
 sub in($) { croak "ERROR: in() not implemented for a ".ref(shift) }
 
-=method projectOn $nick, $points
-The $points are ARRAYS with each an X and Y coordinate of a single
-point in space.  A list of transformed $points is returned, which is empty
-if no change is needed.  The returned list is preceded by a projection
-$nick which is the result, usually the same as the provided $nick, but in
-some cases (for instance UTM) it may be different.
+=method projectOn $nick, @points
+The @points are ARRAYs with each an X and Y coordinate of a single
+point in space.  A list of transformed points is returned, which is empty
+if no change is needed.  The returned list is preceded by the projection
+nick of the result; usually the same as the provided $nick, but in
+some cases (for instance UTM) it may differ.
 =cut
 
 sub projectOn($@)
@@ -152,7 +146,6 @@ sub projectOn($@)
 }
 
 #---------------------------
-
 =section Geometry
 
 =method distance $object, [$unit]
@@ -225,9 +218,7 @@ xmin, ymin, xmax, ymax.  The values are expressed in the coordinate
 system of the object.
 =cut
 
-sub bbox()
-{   confess "INTERNAL: bbox() not implemented for ".ref(shift);
-}
+sub bbox() { confess "INTERNAL: bbox() not implemented for ".ref(shift) }
 
 =method bboxCenter
 Returns a M<Geo::Point> which represent the middle of the object.  It is
@@ -247,25 +238,23 @@ sub bboxCenter()
 Returns the area covered by the geo structure. Points will return zero.
 =cut
 
-sub area()
-{   confess "INTERNAL: area() not implemented for ".ref(shift);
-}
+sub area() { confess "INTERNAL: area() not implemented for ".ref(shift) }
 
 =method perimeter
 Returns the length of the outer border of the object's components.  For
 points, this returns zero.
 =cut
 
-sub perimeter()
-{   confess "INTERNAL: perimeter() not implemented for ".ref(shift);
-}
+sub perimeter() { confess "INTERNAL: perimeter() not implemented for ".ref(shift) }
 
 =section Display
 
 =ci_method deg2dms $degrees, $pos, $neg
+Translate floating point $degrees into a "degrees minutes seconds"
+notation.  An attempt is made to handle rounding errors.
 =example
- print $point->deg2dms(0.12, 'e', 'w');
- print Geo::Shape->deg2dms(0.12, 'e', 'w');
+ print $point->deg2dms(-12.34, 'E', 'W');'     # --> 12d20'24"W
+ print Geo::Shape->deg2dms(52.1234, 'E', 'W'); # --> 52d07'24"E
 =cut
 
 sub deg2dms($$$)
@@ -280,7 +269,6 @@ sub deg2dms($$$)
     }
 
     my $d       = int $degrees;
-
     my $frac    = ($degrees - $d) * 60;
     my $m       = int($frac + 0.00001);
     my $s       = ($frac - $m) * 60;
@@ -333,12 +321,12 @@ sub dms2deg($)
    my $o = 'E';
    $dms =~ s/^\s+//;
 
-   if($dms =~ s/([ewsn])\s*$//i)    { $o = uc($1) }
-   elsif($dms =~ s/^([ewsn])\s*//i) { $o = uc($1) }
+      if($dms =~ s/([ewsn])\s*$//i) { $o = uc $1 }
+   elsif($dms =~ s/^([ewsn])\s*//i) { $o = uc $1 }
 
-   if($dms =~ m/^( [+-]? \d+ (?: \.\d+)? )     [\x{B0}dD]?
-                 \s* (?: ( \d+ (?: \.\d+)? )   [\'mM\x{92}]? )?
-                 \s* (?: ( \d+ (?: \.\d+)? )   [\"sS]? )?
+   if($dms =~ m/^( [+-]? \d+ (?: \.\d+)? )   [\x{B0}dD]?
+               \s* (?: ( \d+ (?: \.\d+)? )   [\'mM\x{92}]? )?
+               \s* (?: ( \d+ (?: \.\d+)? )   [\"sS]? )?
                /xi
      )
    {   my ($d, $m, $s) = ($1, $2||0, $3||0);

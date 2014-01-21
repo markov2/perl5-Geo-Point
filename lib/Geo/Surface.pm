@@ -29,7 +29,7 @@ possible enclosures in one projection system.
 
 =section Constructors
 
-=c_method new <$surface|<$outer,$inner,...>>, [%options]
+=c_method new <$surface | <$outer,$inner,...> >, %options
 When called as instance method, some defaults are copied from the
 object where the call is made upon.
 
@@ -132,6 +132,7 @@ sub geoInner()
 *geo_outer = \&geoOuter;
 *geo_inner = \&geoInner;
 
+#--------------
 =section Projections
 =cut
 
