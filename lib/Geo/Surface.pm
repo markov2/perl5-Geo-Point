@@ -20,7 +20,7 @@ Geo::Surface - A surface description.
  my $island = Geo::Surface->new($outer, $lake1, $lake2);
 
 =chapter DESCRIPTION
-In this context, a "surface" is defined as one filled area with
+In this context, a "surface" is defined as a single filled area with
 possible enclosures in one projection system.
 
 =chapter OVERLOAD
