@@ -1,8 +1,11 @@
+# This code is part of distribution Geo-Point.  Meta-POD processed with
+# OODoc into POD and HTML manual-pages.  See README.md
+# Copyright Mark Overmeer.  Licensed under the same terms as Perl itself.
+
+package Geo::Proj;
 
 use strict;
 use warnings;
-
-package Geo::Proj;
 
 use Geo::Proj4   ();
 use Carp         qw/croak/;

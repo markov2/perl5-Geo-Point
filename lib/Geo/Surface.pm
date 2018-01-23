@@ -1,9 +1,12 @@
-
-use strict;
-use warnings;
+# This code is part of distribution Geo-Point.  Meta-POD processed with
+# OODoc into POD and HTML manual-pages.  See README.md
+# Copyright Mark Overmeer.  Licensed under the same terms as Perl itself.
 
 package Geo::Surface;
 use base 'Geo::Shape';
+
+use strict;
+use warnings;
 
 use Math::Polygon::Surface ();
 use Math::Polygon::Calc    qw/polygon_bbox/;
@@ -29,7 +32,7 @@ possible enclosures in one projection system.
 
 =section Constructors
 
-=c_method new <$surface | <$outer,$inner,...> >, %options
+=ci_method new <$surface | <$outer,$inner,...> >, %options
 When called as instance method, some defaults are copied from the
 object where the call is made upon.
 

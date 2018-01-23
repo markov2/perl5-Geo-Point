@@ -1,9 +1,12 @@
-
-use strict;
-use warnings;
+# This code is part of distribution Geo-Point.  Meta-POD processed with
+# OODoc into POD and HTML manual-pages.  See README.md
+# Copyright Mark Overmeer.  Licensed under the same terms as Perl itself.
 
 package Geo::Space;
 use base 'Geo::Shape';
+
+use strict;
+use warnings;
 
 use Math::Polygon::Calc    qw/polygon_bbox/;
 use List::Util             qw/sum first/;

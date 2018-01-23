@@ -1,9 +1,12 @@
 Revision history for Perl extension Geo::Point
 
-version 0.97:
+version 0.97: Tue Jan 23 20:43:58 CET 2018
 
-	Fixes:
-	- include examples in the manual-pages.
+	Improvements:
+	- converted to GIT
+	- published via GitHUB
+	- remove dependency on Test::POD
+	- Geo::Shape::new() and Geo::Point::new() as instance method
 
 version 0.96: Tue Jan 21 14:34:23 CET 2014
 

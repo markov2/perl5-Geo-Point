@@ -1,8 +1,11 @@
+# This code is part of distribution Geo-Point.  Meta-POD processed with
+# OODoc into POD and HTML manual-pages.  See README.md
+# Copyright Mark Overmeer.  Licensed under the same terms as Perl itself.
+
+package Geo::Shape;
 
 use strict;
 use warnings;
-
-package Geo::Shape;
 
 use Geo::Proj;      # defines wgs84
 use Geo::Point      ();
@@ -51,7 +54,7 @@ use overload '""'     => 'string'
 
 =section Constructors
 
-=c_method new %options
+=ci_method new %options
 Create a new object.
 
 =option  proj       LABEL
@@ -59,7 +62,11 @@ Create a new object.
 
 =cut
 
-sub new(@) { my $class = shift; (bless {}, $class)->init( {@_} ) }
+sub new(@) {
+    my ($thing, %args) = @_;
+    $args{proj} ||= $thing->proj if ref $thing;
+	(bless {}, ref $thing || $thing)->init(\%args);
+}
 
 sub init($)
 {   my ($self, $args) = @_;

@@ -1,9 +1,12 @@
-
-use strict;
-use warnings;
+# This code is part of distribution Geo-Point.  Meta-POD processed with
+# OODoc into POD and HTML manual-pages.  See README.md
+# Copyright Mark Overmeer.  Licensed under the same terms as Perl itself.
 
 package Geo::Point;
 use base 'Geo::Shape';
+
+use strict;
+use warnings;
 
 use Geo::Proj;
 use Carp        qw/confess croak/;
@@ -43,7 +46,7 @@ M<xy()>, and M<yx()>.
 
 =section Constructors
 
-=c_method new %options
+=ci_method new %options
 
 =option  latitude  COORDINATE
 =default latitude  undef
