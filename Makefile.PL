@@ -14,7 +14,7 @@ WriteMakefile
      }
   , AUTHOR      => 'Mark Overmeer'
   , ABSTRACT    => 'Geographical structures'
-  , LICENSE     => 'perl'
+  , LICENSE     => 'perl_5'
 
   , META_MERGE =>
       { 'meta-spec' => { version => 2 }
@@ -24,9 +24,9 @@ WriteMakefile
               , url  => 'https://github.com/markov2/perl5-Geo-Point.git'
               , web  => 'https://github.com/markov2/perl5-Geo-Point'
               }
+          , homepage => 'http://perl.overmeer.net/CPAN/'
+          , license  => [ 'http://dev.perl.org/licenses/' ]
           }
-      , homepage => 'http://perl.overmeer.net/CPAN/'
-      , license  => [ 'http://dev.perl.org/licenses/' ]
       }
   );
 
