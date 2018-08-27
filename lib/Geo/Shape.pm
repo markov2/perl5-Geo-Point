@@ -97,7 +97,7 @@ sub proj4() { Geo::Proj->proj4(shift->{G_proj}) }
 =section Projections
 
 =method in <$label|'utm'>
-The coordinates of this point in a certain projection, refered to with
+The coordinates of this point in a certain projection, referred to with
 the $label.  The projection is defined with M<new()>.  When simply
 'utm' is provided, the best UTM zone is selected.
 

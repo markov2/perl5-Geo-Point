@@ -173,7 +173,7 @@ sub yx(@)
 
 =c_method fromString $string, [$projection]
 Create a new point from a $string.  The coordinates can be separated by
-a comma (preferrably), or blanks.  When the coordinates end on NSEW, the
+a comma (preferably), or blanks.  When the coordinates end on NSEW, the
 order does not matter, otherwise lat-long or xy order is presumed.
 
 This routine is very smart.  It understands:
@@ -213,8 +213,8 @@ Those coordinates must follow the rules of M<dms2deg()>.
 
 =error illegal UTM zone in $string
 A UTM zone can be detected at the beginning or at the end of the
-input.  It contains a number (from 1 upto 60) and an optional
-latitude indication (C upto X, except I and O).
+input.  It contains a number (from 1 up to 60) and an optional
+latitude indication (C up to X, except I and O).
 
 =error undefined projection $proj for $string
 The projection you used (or is set as default) is not defined.  See

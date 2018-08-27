@@ -149,7 +149,7 @@ sub filled(@)
 
 =c_method bboxFromString $string, [$projection]
 Create a square from the $string.  The coordinates can be separated by
-a comma (preferrably), or blanks.  When the coordinates end on NSEW, the
+a comma (preferably), or blanks.  When the coordinates end on NSEW, the
 order does not matter, otherwise lat-long or xy order is presumed.
 
 This routine is very smart.  It understands 
