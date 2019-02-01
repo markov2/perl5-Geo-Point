@@ -45,7 +45,7 @@ EMAIL           = markov@cpan.org
 WEBSITE         = http://perl.overmeer.net/CPAN/
 
 # for HTML
-EXTENDS		= ../Geo-Proj4:../Geo-WKT:../Geo-GML:../Geo-ISO19139:../../perl/GeoEOP:../../perl/XMLCompile:../../perl/XMLCache:../Geo-Format-Envisat:../Geo-Format-Landsat:../../perl/DBD-mysql-Geom:../Geo-WKT:../Math-Polygon
+EXTENDS		= ../Geo-Proj4:../Geo-WKT:../Geo-GML:../Geo-ISO19139:../../perl/GeoEOP:../XML-Compile:../XML-Compile-Cache:../Geo-Format-Envisat:../Geo-Format-Landsat:../../perl/DBD-mysql-Geom:../Geo-WKT:../Math-Polygon
 HTML_OUTPUT     = ../public_html/geo/html
 HTML_DOCROOT    = /geo/html
 HTML_PACKAGE    = ../public_html/geo-point/htmlpkg
