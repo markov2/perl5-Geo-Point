@@ -387,7 +387,7 @@ sub normalize()
 The bounding box of a point contains twice itself.
 =cut
 
-sub bbox() { @{(shift)}[ qw/GP_x GP_y GP_x GP_y/ ] }
+sub bbox() { @{(shift)}{qw/GP_x GP_y GP_x GP_y/} }
 
 =method area
 Always returns zero.
