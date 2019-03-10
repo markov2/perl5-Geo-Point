@@ -9,7 +9,9 @@ use strict;
 use warnings;
 
 use Geo::Proj;
-use Carp        qw/confess croak/;
+use Math::Trig                  qw/deg2rad/;
+use GIS::Distance::Constants    qw/$KILOMETER_RHO/;
+use Carp                        qw/confess croak/;
 
 =chapter NAME
 
@@ -401,20 +403,29 @@ Always returns zero.
 
 sub perimeter() { 0 }
 
-=method distancePointPoint $geodist, $units, $point
+=method distancePointPoint $gisdist, $units, $point
 Compute the distance between the current point and some other $point in
-$units.  The $geodist object will do the calculations.  See M<distance()>.
+$units.  The $gisdist object will do the calculations.  See M<distance()>.
 =cut
 
 # When two points are within one UTM zone, this could be done much
 # easier...
 
 sub distancePointPoint($$$)
-{   my ($self, $geodist, $units, $other) = @_;
+{   my ($self, $gisdist, $units, $other) = @_;
 
     my $here  = $self->in('wgs84');
     my $there = $other->in('wgs84');
-    $geodist->distance($units, $here->latlong, $there->latlong);
+    my $distance = $gisdist->distance($here->latlong, $there->latlong);
+
+    if ($units eq 'degrees') {
+        return( ($distance->km() / $KILOMETER_RHO) * 360 );
+    }
+    elsif ($units eq 'radians') {
+        return deg2rad( ($distance->km() / $KILOMETER_RHO) * 360 );
+    }
+
+    return $distance->$units();
 }
 
 =method sameAs $other, $tolerance

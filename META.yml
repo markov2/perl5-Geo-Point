@@ -5,7 +5,7 @@ version:      0.05
 version_from: 
 installdirs:  site
 requires:
-    Geo::Distance:                 0.06
+    GIS::Distance:                 0.14
     Geo::Proj4:                    0.96
     Math::Polygon:                 0.003
     Test::More:                    0.47
