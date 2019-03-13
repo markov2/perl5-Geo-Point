@@ -7,7 +7,7 @@ WriteMakefile
   , VERSION     => '0.99'
   , PREREQ_PM   =>
      { Test::More    => 0.47
-     , Geo::Distance => 0.06
+     , GIS::Distance => 0.14
      , Geo::Proj4    => 1.01
      , Math::Polygon => 1.01
      , Math::Trig    => 1.00

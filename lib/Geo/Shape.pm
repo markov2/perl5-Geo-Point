@@ -13,8 +13,7 @@ use Geo::Line       ();
 use Geo::Surface    ();
 use Geo::Space      ();
 
-use Geo::Distance   ();
-use Math::Trig      qw/deg2rad/;
+use GIS::Distance   ();
 use Carp            qw/croak confess/;
 
 =chapter NAME
@@ -160,9 +159,9 @@ Calculate the distance between this object and some other object.
 For many combinations of objects this is not supported or only
 partially supported.
 
-This calculation is performed with L<Geo::Distance> in accurate mode.
+This calculation is performed with L<GIS::Distance> in accurate mode.
 The default $unit is kilometers.  Other units are provided in the manual
-page of L<Geo::Distance>.  As extra unit, C<degrees> and C<radians> are
+page of L<GIS::Distance>.  As extra unit, C<degrees> and C<radians> are
 added as well as the C<km> alias for kilometer.
 
 =error distance calculation not implemented between a $kind and a $kind
@@ -170,25 +169,19 @@ Only a subset of all objects can be used in the distance calculation.
 The limitation is purely caused by lack of time to implement this.
 =cut
 
-my $geodist;
+my $gisdist;
 sub distance($;$)
 {   my ($self, $other, $unit) = (shift, shift, shift);
     $unit ||= 'kilometer';
 
-    unless($geodist)
-    {   $geodist = Geo::Distance->new;
-        $geodist->formula('hsin');
-        $geodist->reg_unit(1 => 'radians');
-        $geodist->reg_unit(deg2rad(1) => 'degrees');
-        $geodist->reg_unit(km => 1, 'kilometer');
-    }
+    $gisdist ||= GIS::Distance->new('Haversine');
 
     my $proj = $self->proj;
     $other = $other->in($proj)
         if $other->proj ne $proj;
 
     if($self->isa('Geo::Point') && $other->isa('Geo::Point'))
-    {   return $self->distancePointPoint($geodist, $unit, $other);
+    {   return $self->distancePointPoint($gisdist, $unit, $other);
     }
 
     die "ERROR: distance calculation not implemented between a "
