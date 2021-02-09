@@ -74,6 +74,7 @@ sub import()
    );
 }
 
+#-----------------------
 =section Constructors
 
 =c_method new [$nick], %options
@@ -138,6 +139,7 @@ sub init($)
     $self;
 }
 
+#-----------------------
 =section Attributes
 
 =method nick
@@ -189,6 +191,7 @@ The "Spatial Reference System ID" if known.
 
 sub srid() {shift->{GP_srid}}
 
+#-----------------------
 =section Projecting
 
 =c_method projection <$nick|$proj>
@@ -271,6 +274,7 @@ sub to($@)
     $myproj4->transform($toproj4, shift);
 }
 
+#-----------------------
 =section UTM
 =cut
 
@@ -340,6 +344,7 @@ sub bestUTMprojection($;$)
     my ($zone, $letter, $meridian) = $thing->zoneForUTM($point);
     $thing->UTMprojection($proj, $zone);
 }
+
 
 =c_method UTMprojection <$datum|$proj|undef>, $zone
 The $proj is a M<Geo::Proj> which is used to collect the datum
